@@ -1,6 +1,5 @@
 package com.neural;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +13,9 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
+
+import com.logic.GameLogic;
 
 import lombok.Data;
 
@@ -24,60 +24,63 @@ public class NeuralNetwork {
 	private int inputNum = 8;
 	private int outputNum = 3;
 	private List<INDArray> list;
-	
-	
+	private MultiLayerConfiguration conf;
+	private MultiLayerNetwork multiLayerNetwork;
+
+	private GameLogic gl;
+
 	public NeuralNetwork(List<INDArray> list) {
 		this.list = list;
+		gl = new GameLogic(4, 4);
+		createBrain();
+		startNeuralNetwork(conf);
+		setNetworkParams();
 	}
-	
-	public NeuralNetwork() {
-		//this.list = list;
-	}
-	
-	private void createBrain() {
-		MultiLayerConfiguration conf 
-		  = new NeuralNetConfiguration.Builder()
-		    .activation(Activation.TANH)
-		    .weightInit(WeightInit.XAVIER)
-		    .list()
-		    .layer(0, new DenseLayer.Builder().nIn(inputNum).nOut(5).build())
-		    .layer(1, new OutputLayer.Builder(
-		      LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
-		        .activation(Activation.SOFTMAX)
-		        .nIn(5).nOut(outputNum).build())
-		    .build();
-		
-		MultiLayerNetwork multiLayerNetwork = new MultiLayerNetwork(conf);
-	    multiLayerNetwork.init();
-	    Map<String, INDArray> paramTable = multiLayerNetwork.paramTable();
-	    Set<String> keys = paramTable.keySet();
-	    Iterator<String> it = keys.iterator();
 
-	    while (it.hasNext()) {
-	        String key = it.next();
-	        INDArray values = paramTable.get(key);
-	        System.out.print(key+" ");//print keys
-	        System.out.println(Arrays.toString(values.shape()));//print shape of INDArray
-	        System.out.println(values);
-	        multiLayerNetwork.setParam(key, Nd4j.rand(values.shape()));//set some random values
-	    }
+	public NeuralNetwork() {
+		// this.list = list;
+		gl = new GameLogic(4, 4);
+		createBrain();
+		startNeuralNetwork(conf);
+		setNetworkParams();
 	}
-	
-	
+
+	private void createBrain() {
+		conf = new NeuralNetConfiguration.Builder().activation(Activation.SIGMOID).weightInit(WeightInit.XAVIER).list()
+				.layer(0, new DenseLayer.Builder().nIn(inputNum).nOut(5).build())
+				.layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+						.activation(Activation.SOFTMAX).nIn(5).nOut(outputNum).build())
+				.build();
+	}
+
+	public void startNeuralNetwork(MultiLayerConfiguration conf) {
+		multiLayerNetwork = new MultiLayerNetwork(conf);
+		multiLayerNetwork.init();
+
+	}
+
+	public void setNetworkParams() {
+		int itAux = 0;
+		Map<String, INDArray> paramTable = multiLayerNetwork.paramTable();
+		Set<String> keys = paramTable.keySet();
+		Iterator<String> it = keys.iterator();
+
+		for (int i = 0; it.hasNext() && i < list.size(); i++) {
+			String key = it.next();
+			multiLayerNetwork.setParam(key, list.get(i));
+			itAux++;
+		}
+	}
 
 	public double play() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
-	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		new NeuralNetwork().createBrain();
+		while (!gl.isGameOver()) {
+
+		}
+		return gl.getFoodPoints() + gl.getSurvivingPoints();
 	}
 
+	public static void main(String[] args) {
+		new NeuralNetwork();
+	}
 
 }
