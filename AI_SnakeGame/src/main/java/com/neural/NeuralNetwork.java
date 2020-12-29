@@ -60,7 +60,6 @@ public class NeuralNetwork {
 	}
 
 	public void setNetworkParams() {
-		int itAux = 0;
 		Map<String, INDArray> paramTable = multiLayerNetwork.paramTable();
 		Set<String> keys = paramTable.keySet();
 		Iterator<String> it = keys.iterator();
@@ -68,12 +67,19 @@ public class NeuralNetwork {
 		for (int i = 0; it.hasNext() && i < list.size(); i++) {
 			String key = it.next();
 			multiLayerNetwork.setParam(key, list.get(i));
-			itAux++;
 		}
 	}
+	
+	public void feedNetwork() {
+		
+	}
+	
+	
 
 	public double play() {
 		while (!gl.isGameOver()) {
+			
+			gl.moveSnake();
 
 		}
 		return gl.getFoodPoints() + gl.getSurvivingPoints();
