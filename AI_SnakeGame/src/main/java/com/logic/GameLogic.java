@@ -33,18 +33,18 @@ public class GameLogic{
 		gameMatrix = new int[width][height];
 		gameMatrix[foodPos.y][foodPos.x] = 2;
 		for(Point p : snake)
-			gameMatrix[p.x][p.y] = 1;
-		//printGame();
+			gameMatrix[p.y][p.x] = 1;
+		printGame();
 	}
 	
 	private void gameLoop() {
 		Scanner scanner = new Scanner(System.in);
-		gameUpdate();
+		//gameUpdate();
 		while(!gameOver && scanner.hasNextLine()) {
 			String key = scanner.nextLine();
 			System.out.println(key.length());
 			keyPressed(key);
-			gameUpdate();
+			//gameUpdate();
 		}
 		scanner.close();
 		printScore();
@@ -65,7 +65,7 @@ public class GameLogic{
 			snake.add(new Point(snake.getLast().x + move.getValue().x, snake.getLast().y + move.getValue().y));
 			survivingPoints +=1;
 			lastMove = move;
-			if(gameMatrix[snake.getLast().x][snake.getLast().y] != 2) {
+			if(gameMatrix[snake.getLast().y][snake.getLast().x] != 2) {
 				snake.removeFirst();
 			}else {
 				foodPoints += 5;
@@ -96,17 +96,17 @@ public class GameLogic{
 	
 	
 	
-//	
-//	private void printGame() {
-//		String rowAux = "";
-//		 for (int row = 0; row < gameMatrix.length; row++) {
-//			    for (int col = 0; col < gameMatrix[row].length; col++) {
-//			    	rowAux += Integer.toString(gameMatrix[row][col]) + " ";
-//			    }
-//			    System.out.println(rowAux);
-//			    rowAux ="";
-//			 }
-//	}
+	
+	private void printGame() {
+		String rowAux = "";
+		 for (int row = 0; row < gameMatrix.length; row++) {
+			    for (int col = 0; col < gameMatrix[row].length; col++) {
+			    	rowAux += Integer.toString(gameMatrix[row][col]) + " ";
+			    }
+			    System.out.println(rowAux);
+			    rowAux ="";
+			 }
+	}
 	
 	private void printScore() {
 		System.out.println("Final score is: " + (foodPoints + survivingPoints) + " points.");
