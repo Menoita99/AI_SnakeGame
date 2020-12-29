@@ -6,6 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -29,6 +35,8 @@ public class NeuralNetwork {
 	private List<NDArray> list;
 	private MultiLayerConfiguration conf;
 	private MultiLayerNetwork multiLayerNetwork;
+
+	private ExecutorService executor = Executors.newFixedThreadPool(1);
 
 	private GameLogic gl;
 
@@ -66,18 +74,17 @@ public class NeuralNetwork {
 		Map<String, INDArray> paramTable = multiLayerNetwork.paramTable();
 		Set<String> keys = paramTable.keySet();
 		Iterator<String> it = keys.iterator();
-		System.out.println(paramTable);
-		System.out.println("--------------------------------------");
+		//		System.out.println(paramTable);
+		//		System.out.println("--------------------------------------");
 		for (int i = 0; it.hasNext() && i < list.size(); i++) {
 			String key = it.next();
 			multiLayerNetwork.setParam(key, list.get(i));
 		}
-		System.out.println(paramTable);
+		//		System.out.println(paramTable);
 	}
 
 	public Moves feedNetwork(INDArray input) {
 		INDArray output = multiLayerNetwork.output(input);
-		System.out.println(output);
 		int highestIndex = 0;
 		for (int i = 0; i < output.length(); i++) {
 			if(output.getDouble(i) > output.getDouble(highestIndex)) {
@@ -94,7 +101,7 @@ public class NeuralNetwork {
 		} else if (highestIndex == 0) {
 			return Moves.LEFT;
 		}
-		
+
 		throw new IllegalStateException();
 	}
 
@@ -157,12 +164,22 @@ public class NeuralNetwork {
 	}
 
 	public double play() {
-		INDArray input;
-		while (!gl.isGameOver()) {
-			input = getInput();
-			gl.moveSnake(feedNetwork(input));
+		Future<Integer> future = executor.submit(()->{
+			INDArray input;
+//			System.out.println(Thread.currentThread()+" Start playing");
+			while (!gl.isGameOver()) {
+				input = getInput();
+				gl.moveSnake(feedNetwork(input));
+			}
+//			System.out.println(Thread.currentThread()+" Lost with "+ (gl.getFoodPoints() + gl.getSurvivingPoints()));
+			return gl.getFoodPoints() + gl.getSurvivingPoints();
+		});
+		try {
+			return future.get(100, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			System.err.println("THE MOTHER FUCKER SNAKE IS IN LOOP (DUMB ASS SNAKE)");
+			return 0;
 		}
-		return gl.getFoodPoints() + gl.getSurvivingPoints();
 	}
 
 	public static void main(String[] args) {
@@ -191,9 +208,9 @@ public class NeuralNetwork {
 		list.add(new NDArray(new double [][] {
 			{0,0,0,0},
 		}));
-		
+
 		new NeuralNetwork(list);
-	
+
 	}
 
 }

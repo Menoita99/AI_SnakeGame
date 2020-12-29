@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.cpu.nativecpu.NDArray;
 
 import com.neural.NeuralNetwork;
@@ -18,21 +17,23 @@ import io.jenetics.engine.Codec;
 import io.jenetics.engine.Problem;
 import io.jenetics.util.Factory;
 
-public class GeneticTraining implements Problem<List<INDArray> , DoubleGene ,Double>{
+public class GeneticTraining implements Problem<List<NDArray> , DoubleGene ,Double>{
 
 	@Override
-	public Function<List<INDArray>, Double> fitness() {
+	public Function<List<NDArray>, Double> fitness() {
+//		System.out.println("fitness");
+		
 		return list -> new NeuralNetwork(list).play();
 	}
 
 	@Override
-	public Codec<List<INDArray>, DoubleGene> codec() {
-		return new Codec<List<INDArray>, DoubleGene>() {
+	public Codec<List<NDArray>, DoubleGene> codec() {
+		return new Codec<List<NDArray>, DoubleGene>() {
 			@Override
 			public Factory<Genotype<DoubleGene>> encoding() {
 				int input = 8;
 				int hidden = 5;
-				int output = 3;
+				int output = 4;
 
 				LinkedList<DoubleChromosome> chromosomes = new LinkedList<>();
 				
@@ -47,6 +48,8 @@ public class GeneticTraining implements Problem<List<INDArray> , DoubleGene ,Dou
 				
 				//bias
 				chromosomes.add(DoubleChromosome.of(-1.0, 1.0, output));
+
+//				System.out.println("Encoded");
 				
 				return Genotype.of(chromosomes);
 			}
@@ -54,13 +57,13 @@ public class GeneticTraining implements Problem<List<INDArray> , DoubleGene ,Dou
 			
 			
 			@Override
-			public Function<Genotype<DoubleGene>, List<INDArray>> decoder() {
+			public Function<Genotype<DoubleGene>, List<NDArray>> decoder() {
 				return genotype -> {
-					LinkedList<INDArray> list = new LinkedList<>();
+					LinkedList<NDArray> list = new LinkedList<>();
 					
 					int input = 8;
 					int hidden = 5;
-					int output = 3;
+					int output = 4;
 					
 					double[][] inputLayer = new double[input][hidden];
 					double[][] inputBiasLayer = new double[1][hidden];
@@ -77,9 +80,10 @@ public class GeneticTraining implements Problem<List<INDArray> , DoubleGene ,Dou
 						else if(i == input)
 							inputBiasLayer[0] = array;
 						else if(i > input && i < input+hidden+1) 
-							hiddenLayer[(input+1)-i] = array;
+							hiddenLayer[i-(input+1)] = array;
 						else if(i == input+hidden+1)
 							hiddenBiasLayer[0] = array;
+						i++;
 					}
 					
 					list.add(new NDArray(inputLayer));
@@ -87,6 +91,7 @@ public class GeneticTraining implements Problem<List<INDArray> , DoubleGene ,Dou
 					list.add(new NDArray(hiddenLayer));
 					list.add(new NDArray(hiddenBiasLayer));
 					
+//					System.out.println("DECODED");
 					return list;
 				};
 			}
