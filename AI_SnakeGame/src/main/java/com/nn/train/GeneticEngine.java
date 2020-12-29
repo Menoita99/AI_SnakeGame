@@ -18,7 +18,7 @@ public class GeneticEngine {
 	public void setUpEngine() {
 		engine = Engine.builder(new GeneticTraining())
 				.optimize(Optimize.MAXIMUM)
-				.populationSize(5) 
+				.populationSize(10)
 				.offspringFraction(0.75)//0.6 standaard
 				.survivorsSelector (new TournamentSelector <>(2) )  //standaard new TournamentSelector <>(3)
 				.offspringSelector (new RouletteWheelSelector <>() ) 

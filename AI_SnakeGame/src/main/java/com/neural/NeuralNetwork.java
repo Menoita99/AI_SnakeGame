@@ -175,7 +175,7 @@ public class NeuralNetwork {
 			return gl.getFoodPoints() + gl.getSurvivingPoints();
 		});
 		try {
-			return future.get(100, TimeUnit.MILLISECONDS);
+			return future.get(1000, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			System.err.println("THE MOTHER FUCKER SNAKE IS IN LOOP (DUMB ASS SNAKE)");
 			return 0;

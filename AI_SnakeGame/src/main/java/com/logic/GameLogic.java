@@ -34,7 +34,7 @@ public class GameLogic{
 		gameMatrix[foodPos.y][foodPos.x] = 2;
 		for(Point p : snake)
 			gameMatrix[p.y][p.x] = 1;
-		printGame();
+		//printGame();
 	}
 	
 	private void gameLoop() {
@@ -110,6 +110,10 @@ public class GameLogic{
 	
 	private void printScore() {
 		System.out.println("Final score is: " + (foodPoints + survivingPoints) + " points.");
+	}
+	
+	public int getScore() {
+		return foodPoints + survivingPoints;
 	}
 	
 	public void keyPressed(String key) {
