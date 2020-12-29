@@ -14,16 +14,21 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.cpu.nativecpu.NDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
+import lombok.Data;
+
+@Data
 public class NeuralNetwork {
 	private int inputNum = 8;
 	private int outputNum = 3;
-	private List<NDArray> list;
+	private List<INDArray> list;
 	
 	
+	public NeuralNetwork(List<INDArray> list) {
+		this.list = list;
+	}
 	
 	public NeuralNetwork() {
 		//this.list = list;
@@ -61,7 +66,11 @@ public class NeuralNetwork {
 	}
 	
 	
-	
+
+	public double play() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 	
@@ -71,5 +80,6 @@ public class NeuralNetwork {
 	public static void main(String[] args) {
 		new NeuralNetwork().createBrain();
 	}
+
 
 }

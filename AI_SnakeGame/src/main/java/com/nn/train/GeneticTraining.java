@@ -5,6 +5,8 @@ import java.util.function.Function;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
+import com.neural.NeuralNetwork;
+
 import io.jenetics.DoubleGene;
 import io.jenetics.engine.Codec;
 import io.jenetics.engine.Problem;
@@ -13,8 +15,7 @@ public class GeneticTraining implements Problem<List<INDArray> , DoubleGene ,Dou
 
 	@Override
 	public Function<List<INDArray>, Double> fitness() {
-		// TODO Auto-generated method stub
-		return null;
+		return list -> new NeuralNetwork(list).play();
 	}
 
 	@Override
