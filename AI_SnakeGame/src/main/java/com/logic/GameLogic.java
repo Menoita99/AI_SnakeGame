@@ -82,17 +82,17 @@ public class GameLogic{
 		//System.out.println("Food generated at: (" + foodPos.x + ", " + foodPos.y + ")");
 		gameMatrix[foodPosAux.y][foodPosAux.x] = 2;
 	}
-	
-	private void printGame() {
-		String rowAux = "";
-		 for (int row = 0; row < gameMatrix.length; row++) {
-			    for (int col = 0; col < gameMatrix[row].length; col++) {
-			    	rowAux += Integer.toString(gameMatrix[row][col]) + " ";
-			    }
-			    System.out.println(rowAux);
-			    rowAux ="";
-			 }
-	}
+//	
+//	private void printGame() {
+//		String rowAux = "";
+//		 for (int row = 0; row < gameMatrix.length; row++) {
+//			    for (int col = 0; col < gameMatrix[row].length; col++) {
+//			    	rowAux += Integer.toString(gameMatrix[row][col]) + " ";
+//			    }
+//			    System.out.println(rowAux);
+//			    rowAux ="";
+//			 }
+//	}
 	
 	private void printScore() {
 		System.out.println("Final score is: " + (foodPoints + survivingPoints) + " points.");

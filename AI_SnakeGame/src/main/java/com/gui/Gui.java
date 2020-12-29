@@ -1,5 +1,4 @@
 package com.gui;
-import java.awt.Point;
 
 import com.logic.GameLogic;
 import com.logic.Moves;
@@ -12,7 +11,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
