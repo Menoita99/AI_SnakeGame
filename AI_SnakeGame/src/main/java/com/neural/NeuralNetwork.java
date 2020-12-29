@@ -56,10 +56,9 @@ public class NeuralNetwork {
 	}
 
 	private void createBrain() {
-		conf = new NeuralNetConfiguration.Builder().activation(Activation.SIGMOID).list()
-				.layer(0, new DenseLayer.Builder().activation(Activation.SIGMOID).nIn(inputNum).nOut(hiddenNum).build())
-				.layer(1,
-						new OutputLayer.Builder().activation(Activation.SOFTMAX).nIn(hiddenNum).nOut(outputNum).build())
+		conf = new NeuralNetConfiguration.Builder().activation(Activation.RELU).list()
+				.layer(0, new DenseLayer.Builder().activation(Activation.RELU).nIn(inputNum).nOut(hiddenNum).build())
+				.layer(1, new OutputLayer.Builder().activation(Activation.SOFTMAX).nIn(hiddenNum).nOut(outputNum).build())
 				.build();
 	}
 
@@ -174,7 +173,7 @@ public class NeuralNetwork {
 			return gl.getFoodPoints() + gl.getSurvivingPoints();
 		});
 		try {
-			return future.get(1000, TimeUnit.MILLISECONDS);
+			return future.get(250, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			return gl.getFoodPoints() + gl.getSurvivingPoints();
 			

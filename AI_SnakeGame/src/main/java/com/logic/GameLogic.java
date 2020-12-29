@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class GameLogic{
 	
+	private static final Random RANDOM = new Random(1);
 	private int width, height;
 	private int[][] gameMatrix;
 	
@@ -79,7 +80,7 @@ public class GameLogic{
 	private void generateFood() {
 		Point foodPosAux;
 		do {
-			foodPosAux = new Point(new Random().nextInt(width), new Random().nextInt(height));
+			foodPosAux = new Point(RANDOM.nextInt(width), RANDOM.nextInt(height));
 		}while(snake.contains(foodPosAux));
 		foodPos = foodPosAux;
 		//System.out.println("Food generated at: (" + foodPos.x + ", " + foodPos.y + ")");
