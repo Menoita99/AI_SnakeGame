@@ -21,6 +21,8 @@ public class GeneticTraining implements Problem<List<NDArray> , DoubleGene ,Doub
 
 	@Override
 	public Function<List<NDArray>, Double> fitness() {
+//		System.out.println("fitness");
+		
 		return list -> new NeuralNetwork(list).play();
 	}
 
@@ -47,6 +49,8 @@ public class GeneticTraining implements Problem<List<NDArray> , DoubleGene ,Doub
 				//bias
 				chromosomes.add(DoubleChromosome.of(-1.0, 1.0, output));
 
+//				System.out.println("Encoded");
+				
 				return Genotype.of(chromosomes);
 			}
 
@@ -86,6 +90,8 @@ public class GeneticTraining implements Problem<List<NDArray> , DoubleGene ,Doub
 					list.add(new NDArray(inputBiasLayer));
 					list.add(new NDArray(hiddenLayer));
 					list.add(new NDArray(hiddenBiasLayer));
+					
+//					System.out.println("DECODED");
 					return list;
 				};
 			}
