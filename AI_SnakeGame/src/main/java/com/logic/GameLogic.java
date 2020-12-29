@@ -34,7 +34,7 @@ public class GameLogic{
 		gameMatrix[foodPos.y][foodPos.x] = 2;
 		for(Point p : snake)
 			gameMatrix[p.y][p.x] = 1;
-		printGame();
+//		printGame();
 	}
 	
 	private void gameLoop() {

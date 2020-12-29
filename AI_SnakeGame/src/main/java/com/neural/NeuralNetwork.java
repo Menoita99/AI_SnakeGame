@@ -1,7 +1,6 @@
 package com.neural;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -175,42 +174,10 @@ public class NeuralNetwork {
 			return gl.getFoodPoints() + gl.getSurvivingPoints();
 		});
 		try {
-			return future.get(100, TimeUnit.MILLISECONDS);
+			return future.get(1000, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			System.err.println("THE MOTHER FUCKER SNAKE IS IN LOOP (DUMB ASS SNAKE)");
-			return 0;
+			return gl.getFoodPoints() + gl.getSurvivingPoints();
+			
 		}
 	}
-
-	public static void main(String[] args) {
-		List<NDArray> list = new ArrayList<>();
-		list.add(new NDArray(new double [][] {
-			{0,0,0,0,0},
-			{0,0,0,0,0},
-			{0,0,0,0,0},
-			{0,0,0,0,0},
-			{0,0,0,0,0},
-			{0,0,0,0,0},
-			{0,0,0,0,0},
-			{0,0,0,0,0},
-		}));
-		list.add(new NDArray(new double [][] {
-			{0,0,0,0,0},
-		}));
-		list.add(new NDArray(new double [][] {
-			{0,0,0,0},
-			{0,0,0,0},
-			{0,0,0,0},
-			{0,0,0,0},
-			{0,0,0,0},
-
-		}));
-		list.add(new NDArray(new double [][] {
-			{0,0,0,0},
-		}));
-
-		new NeuralNetwork(list);
-
-	}
-
 }

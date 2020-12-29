@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Gui extends Application{
@@ -20,15 +21,17 @@ public class Gui extends Application{
 	private int width = 10;
 	private int height = 10;
 	private static final int BLOCK_SIZE = 20;	
-	
+	private static Gui INSTANCE = null;
 	
 	@Override
 	public void start(Stage window) throws Exception {
+		INSTANCE = this;
 		gl = new GameLogic(width, height);
 		window.setTitle("Snake Game");
+		Text label = new Text("Score: ");
 		Group root = new Group();
 		Scene s = new Scene(root, width * BLOCK_SIZE, height * BLOCK_SIZE, Color.BLUE);
-		final Canvas canvas = new Canvas(width * BLOCK_SIZE, height * BLOCK_SIZE);
+		Canvas canvas = new Canvas(width * BLOCK_SIZE, height * BLOCK_SIZE);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		drawCanvas(gc, gl);
 		s.setOnKeyPressed(key->{
@@ -45,7 +48,7 @@ public class Gui extends Application{
 			if(gl.isGameOver())
 				showErrorDialog("Game Over", "Final score: " + (gl.getFoodPoints() + gl.getSurvivingPoints()) + " point.");
 		});
-		root.getChildren().add(canvas);
+		root.getChildren().addAll(label,canvas);
         window.setScene(s);
         window.show();
         
@@ -82,6 +85,11 @@ public class Gui extends Application{
         alert.showAndWait();
     }
 	
+    
+    public void playWithNeuralNetwork() {
+    	
+    }
+    
 	
 	public static void main(String[] args) {
 		launch(args);
