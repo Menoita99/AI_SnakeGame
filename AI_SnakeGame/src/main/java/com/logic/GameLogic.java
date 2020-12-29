@@ -17,6 +17,7 @@ public class GameLogic{
 	private boolean gameOver = false;
 	private int survivingPoints;
 	private int foodPoints;
+	private Moves lastMove = Moves.UP;
 	
 	
 	public GameLogic(int width, int height) {
@@ -63,6 +64,7 @@ public class GameLogic{
 		if(!gameOver) {
 			snake.add(new Point(snake.getLast().x + move.getValue().x, snake.getLast().y + move.getValue().y));
 			survivingPoints +=1;
+			lastMove = move;
 			if(gameMatrix[snake.getLast().x][snake.getLast().y] != 2) {
 				snake.removeFirst();
 			}else {
@@ -82,6 +84,18 @@ public class GameLogic{
 		//System.out.println("Food generated at: (" + foodPos.x + ", " + foodPos.y + ")");
 		gameMatrix[foodPosAux.y][foodPosAux.x] = 2;
 	}
+	
+	
+	public int getValueAt(Point point) {
+		if(!(point.x < 0 || point.x >= width || point.y < 0 || point.y >= height)) {
+			return gameMatrix[point.y][point.x];
+		}
+		return 1;
+	}
+	
+	
+	
+	
 //	
 //	private void printGame() {
 //		String rowAux = "";

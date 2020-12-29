@@ -3,7 +3,7 @@ import java.awt.Point;
 
 public enum Moves {
 	
-	RIGHT(new Point(0,1)), LEFT(new Point(0, -1)), UP(new Point(-1,0)), DOWN(new Point(1,0));
+	RIGHT(new Point(1,0)), LEFT(new Point(-1, 0)), UP(new Point(0,-1)), DOWN(new Point(0,1));
 	
 	private Point value;
 	
