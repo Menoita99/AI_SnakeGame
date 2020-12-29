@@ -42,10 +42,8 @@ public class NeuralNetwork {
 		        .nIn(5).nOut(outputNum).build())
 		    .build();
 		
-		
 		MultiLayerNetwork multiLayerNetwork = new MultiLayerNetwork(conf);
 	    multiLayerNetwork.init();
-	    
 	    Map<String, INDArray> paramTable = multiLayerNetwork.paramTable();
 	    Set<String> keys = paramTable.keySet();
 	    Iterator<String> it = keys.iterator();
