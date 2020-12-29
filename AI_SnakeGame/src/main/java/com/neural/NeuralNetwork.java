@@ -66,18 +66,17 @@ public class NeuralNetwork {
 		Map<String, INDArray> paramTable = multiLayerNetwork.paramTable();
 		Set<String> keys = paramTable.keySet();
 		Iterator<String> it = keys.iterator();
-		System.out.println(paramTable);
-		System.out.println("--------------------------------------");
+//		System.out.println(paramTable);
+//		System.out.println("--------------------------------------");
 		for (int i = 0; it.hasNext() && i < list.size(); i++) {
 			String key = it.next();
 			multiLayerNetwork.setParam(key, list.get(i));
 		}
-		System.out.println(paramTable);
+//		System.out.println(paramTable);
 	}
 
 	public Moves feedNetwork(INDArray input) {
 		INDArray output = multiLayerNetwork.output(input);
-		System.out.println(output);
 		int highestIndex = 0;
 		for (int i = 0; i < output.length(); i++) {
 			if(output.getDouble(i) > output.getDouble(highestIndex)) {
@@ -158,10 +157,12 @@ public class NeuralNetwork {
 
 	public double play() {
 		INDArray input;
+		System.out.println(Thread.currentThread()+" Start playing");
 		while (!gl.isGameOver()) {
 			input = getInput();
 			gl.moveSnake(feedNetwork(input));
 		}
+		System.out.println(Thread.currentThread()+" Lost with "+ (gl.getFoodPoints() + gl.getSurvivingPoints()));
 		return gl.getFoodPoints() + gl.getSurvivingPoints();
 	}
 
