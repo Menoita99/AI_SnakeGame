@@ -5,6 +5,9 @@ import java.util.Random;
 
 import com.logic.Snake;
 
+import lombok.Data;
+
+@Data
 public class Population {
 
 	private Snake[] snakes;
@@ -37,17 +40,17 @@ public class Population {
 	}
 
 	public void update() { // update all the snakes in the generation
-		if (!bestSnake.isDead()) { // if the best snake is not dead update it, this snake is a replay of the best
-									// from the past generation
-			bestSnake.look();
-			bestSnake.think();
-			bestSnake.move();
-		}
+//		if (!bestSnake.isDead()) { // if the best snake is not dead update it, this snake is a replay of the best
+//									// from the past generation
+//			bestSnake.look();
+//			bestSnake.think();
+//			bestSnake.move();
+//		}
 		for (int i = 0; i < snakes.length; i++) {
 			if (!snakes[i].isDead()) {
 				snakes[i].look();
-				snakes[i].think();
-				snakes[i].move();
+				snakes[i].thinkAndMove();
+//				snakes[i].move();
 			}
 		}
 	}

@@ -2,7 +2,7 @@ package com.gui;
 
 import com.logic.GameLogic;
 import com.logic.Moves;
-import com.neural.NeuralNetwork;
+import com.logic.Snake;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -17,11 +17,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import lombok.Data;
 
 
 public class Gui extends Application{
-	
+
 	private GameLogic gl;
 	private int width = 10;
 	private int height = 10;
@@ -29,13 +28,15 @@ public class Gui extends Application{
 	private Text label;
 	private static final int BLOCK_SIZE = 20;	
 	private static Gui INSTANCE;
-	
+
 	@Override
 	public void start(Stage window) throws Exception {
 		INSTANCE = this;
 		gl = new GameLogic(width, height);
+		Snake sn = new Snake();
+		gl.setSnake(sn);
 		window.setTitle("Snake Game");
-		label = new Text("Score: "+ gl.getScore());
+		label = new Text("Score: "+ sn.getScore());
 		Button b = new Button("Play with nn");
 		b.setOnMouseClicked(event ->{
 		});
@@ -43,7 +44,7 @@ public class Gui extends Application{
 		Scene s = new Scene(root);
 		Canvas canvas = new Canvas(width * BLOCK_SIZE, height * BLOCK_SIZE);
 		gc = canvas.getGraphicsContext2D();
-		
+
 		drawCanvas();
 		s.setOnKeyPressed(key->{
 			if(key.getCode() == KeyCode.W || key.getCode() == KeyCode.UP) {
@@ -57,16 +58,16 @@ public class Gui extends Application{
 			}
 			drawCanvas();
 			if(gl.isGameOver())
-				showErrorDialog("Game Over", "Final score: " + (gl.getFoodPoints() + gl.getSurvivingPoints()) + " point.");
-			label.setText("Score: "+ gl.getScore());
+				showErrorDialog("Game Over", "Final score: " + sn.getScore() + " point.");
+			label.setText("Score: "+ sn.getScore());
 		});
 		root.getChildren().addAll(b,label,canvas);
-        window.setScene(s);
-        window.show();
-        
+		window.setScene(s);
+		window.show();
+
 	}
-	
-	
+
+
 	private void drawCanvas() {
 		gc.setStroke(Color.BLACK);
 		int [][] auxMatrix = gl.getGameMatrix();
@@ -83,35 +84,44 @@ public class Gui extends Application{
 			}
 		}
 	}
-	
+
 	/*
 	 * Display's an error dialog with the title and message given
-     * @param title dialog title
-     * @param Message dialog message
-     */
-    public void showErrorDialog(String title,String Message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(Message);
-        alert.showAndWait();
-    }
-	
-    
-    public void playWithNeuralNetwork(NeuralNetwork nn) {
-//    	AnimationTimer loop = new AnimationTimer() {
-			
-//			@Override
-////			public void handle(long now) {
-////				if()
-//				
-////			}
-////		};    	
-    	
-    	showErrorDialog("Game Over", "Final score: " + (gl.getFoodPoints() + gl.getSurvivingPoints()) + " point.");
-    }
-    
-	
+	 * @param title dialog title
+	 * @param Message dialog message
+	 */
+	public void showErrorDialog(String title,String Message) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(Message);
+		alert.showAndWait();
+	}
+
+
+	public void playWithNeuralNetwork(Snake sn) {
+		gl.setSnake(sn);
+		sn.setGl(gl);
+		AnimationTimer loop = new AnimationTimer() {
+
+			public int frame = 0;
+
+			@Override
+			public void handle(long now) {
+				if(frame % 15 == 0) {
+					if(!gl.isGameOver()) {
+						sn.look();
+						sn.thinkAndMove();
+					}else
+						showErrorDialog("Game Over", "Final score: " + sn.getScore() + " point.");
+				}
+			}
+		};    	
+		loop.start();
+
+	}
+
+
 	/**
 	 * @return the iNSTANCE
 	 */
