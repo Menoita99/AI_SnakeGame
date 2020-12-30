@@ -4,6 +4,7 @@ import com.logic.GameLogic;
 import com.logic.Moves;
 import com.neural.NeuralNetwork;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +17,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import lombok.Data;
+
 
 public class Gui extends Application{
 	
@@ -25,9 +28,11 @@ public class Gui extends Application{
 	private GraphicsContext gc;
 	private Text label;
 	private static final int BLOCK_SIZE = 20;	
+	private static Gui INSTANCE;
 	
 	@Override
 	public void start(Stage window) throws Exception {
+		INSTANCE = this;
 		gl = new GameLogic(width, height);
 		window.setTitle("Snake Game");
 		label = new Text("Score: "+ gl.getScore());
@@ -94,10 +99,27 @@ public class Gui extends Application{
 	
     
     public void playWithNeuralNetwork(NeuralNetwork nn) {
+//    	AnimationTimer loop = new AnimationTimer() {
+			
+//			@Override
+////			public void handle(long now) {
+////				if()
+//				
+////			}
+////		};    	
+    	
     	showErrorDialog("Game Over", "Final score: " + (gl.getFoodPoints() + gl.getSurvivingPoints()) + " point.");
     }
     
 	
+	/**
+	 * @return the iNSTANCE
+	 */
+	public static Gui getINSTANCE() {
+		return INSTANCE;
+	}
+
+
 	public static void main(String[] args) {
 		launch(args);
 	}
