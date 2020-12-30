@@ -9,14 +9,16 @@ import lombok.Data;
 
 @Data
 public class Snake {
+	private static final int FIELD = 5;
+
 	private GameLogic gl;
 
 	private int score = 1;
 	private int lifeLeft = 200; // quantidade de movimentos até morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
-//	private Moves move;
+	//	private Moves move;
 
-	private float  fitness = 0;
+	//	private float  fitness = 0;
 
 
 	private float[] vision = new float[24];
@@ -30,7 +32,7 @@ public class Snake {
 	private int height;
 
 	public Snake() {
-		gl = new GameLogic(5, 5);
+		gl = new GameLogic(FIELD, FIELD);
 		this.width = gl.getWidth();
 		this.height = gl.getHeight();
 		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
@@ -59,23 +61,26 @@ public class Snake {
 		return false;
 	}
 
-//	public void move() { // move the snake
-//		if (!dead) {
-//			if (foodCollide(head.x, head.y)) {
-//				eat();
-//			}
-//			shiftBody();
-//			if (wallCollide(head.x, head.y)) {
-//				dead = true;
-//			} else if (bodyCollide(head.x, head.y)) {
-//				dead = true;
-//			} else if (lifeLeft <= 0) {
-//				dead = true;
-//			}
-//		}
-//	}
+	//	public void move() { // move the snake
+	//		if (!dead) {
+	//			if (foodCollide(head.x, head.y)) {
+	//				eat();
+	//			}
+	//			shiftBody();
+	//			if (wallCollide(head.x, head.y)) {
+	//				dead = true;
+	//			} else if (bodyCollide(head.x, head.y)) {
+	//				dead = true;
+	//			} else if (lifeLeft <= 0) {
+	//				dead = true;
+	//			}
+	//		}
+	//	}
 
 	public void eat() { // eat food
+		//		System.out.println("Eat "+lifeLeft);
+		lifetime++;
+		score ++;
 		if (lifeLeft < 500) {
 			if (lifeLeft > 400) {
 				lifeLeft = 500;
@@ -85,28 +90,30 @@ public class Snake {
 		}
 	}
 
-//	public void shiftBody() { // shift the body to follow the head
-//		float tempx = head.x;
-//		float tempy = head.y;
-//		head.x += move.getValue().x;
-//		head.y += move.getValue().y;
-//		float temp2x;
-//		float temp2y;
-//		for (int i = 0; i < body.size(); i++) {
-//			temp2x = body.get(i).x;
-//			temp2y = body.get(i).y;
-//			body.get(i).setLocation(tempx, tempy);
-//			tempx = temp2x;
-//			tempy = temp2y;
-//		}
-//	}
+	//	public void shiftBody() { // shift the body to follow the head
+	//		float tempx = head.x;
+	//		float tempy = head.y;
+	//		head.x += move.getValue().x;
+	//		head.y += move.getValue().y;
+	//		float temp2x;
+	//		float temp2y;
+	//		for (int i = 0; i < body.size(); i++) {
+	//			temp2x = body.get(i).x;
+	//			temp2y = body.get(i).y;
+	//			body.get(i).setLocation(tempx, tempy);
+	//			tempx = temp2x;
+	//			tempy = temp2y;
+	//		}
+	//	}
 
 	public Snake clone() { // clone the snake
-		return this;
+		Snake clone = new Snake();
+		clone.setBrain(brain);
+		return clone;
 	}
 
 	public Snake crossover(Snake parent) { // crossover the snake with another snake
-		Snake child = this;
+		Snake child = new Snake();
 		child.brain = brain.crossover(parent.brain);
 		return child;
 	}
@@ -115,7 +122,8 @@ public class Snake {
 		brain.mutate(0.05f); // threshhold for now
 	}
 
-	public void calculateFitness() { // calculate the fitness of the snake
+	public float calculateFitness() { // calculate the fitness of the snake
+		float fitness = 0;
 		if (score < 10) {
 			fitness = (float) (Math.floor(lifetime * lifetime) * Math.pow(2, score));
 		} else {
@@ -123,6 +131,8 @@ public class Snake {
 			fitness *= Math.pow(2, 10);
 			fitness *= (score - 9);
 		}
+//		System.out.println("Score "+score+"  fitness "+fitness);
+		return fitness;
 	}
 
 	public void look() { // look in all 8 directions and check for food, body and wall
@@ -210,23 +220,24 @@ public class Snake {
 			gl.moveSnake(Moves.RIGHT);
 			return;
 		}
+		System.out.println("???????????????''");
 	}
 
-//	public void moveUp() {
-//		move = Moves.UP;
-//	}
-//
-//	public void moveDown() {
-//		move = Moves.DOWN;
-//	}
-//
-//	public void moveLeft() {
-//		move = Moves.LEFT;
-//	}
-//
-//	public void moveRight() {
-//		move = Moves.RIGHT;
-//	}
+	//	public void moveUp() {
+	//		move = Moves.UP;
+	//	}
+	//
+	//	public void moveDown() {
+	//		move = Moves.DOWN;
+	//	}
+	//
+	//	public void moveLeft() {
+	//		move = Moves.LEFT;
+	//	}
+	//
+	//	public void moveRight() {
+	//		move = Moves.RIGHT;
+	//	}
 
 	public Point getHead(){
 		return body.getLast();
@@ -234,5 +245,10 @@ public class Snake {
 
 	public boolean isDead() {
 		return gl.isGameOver();
+	}
+
+	public void reduceLife() {
+		lifeLeft--;
+		lifetime++;
 	}
 }

@@ -28,6 +28,7 @@ public class Gui extends Application{
 	private Text label;
 	private static final int BLOCK_SIZE = 20;	
 	private static Gui INSTANCE;
+	private AnimationTimer loop;
 
 	@Override
 	public void start(Stage window) throws Exception {
@@ -102,19 +103,25 @@ public class Gui extends Application{
 	public void playWithNeuralNetwork(Snake sn) {
 		gl.setSnake(sn);
 		sn.setGl(gl);
-		AnimationTimer loop = new AnimationTimer() {
+		loop = new AnimationTimer() {
 
 			public int frame = 0;
 
 			@Override
 			public void handle(long now) {
-				if(frame % 15 == 0) {
+				if(frame % 80 == 0) {
 					if(!gl.isGameOver()) {
 						sn.look();
 						sn.thinkAndMove();
-					}else
-						showErrorDialog("Game Over", "Final score: " + sn.getScore() + " point.");
+					}else {
+						System.out.println("Game Over"+ "Final score: " + sn.getScore() + " point.");
+						this.stop();
+					}
+					System.out.println("MOVE");
+					drawCanvas();
+					frame = 0;
 				}
+				frame++;
 			}
 		};    	
 		loop.start();

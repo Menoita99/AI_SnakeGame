@@ -50,6 +50,11 @@ public class GameLogic{
 	//	}
 
 	public void moveSnake(Moves move) {
+		if(snake.getLifeLeft()<=0) {
+			gameOver = true;
+			return;
+		}
+			
 		for(Point p : snake.getBody()) {
 			if(new Point(snake.getHead().x + move.getValue().x, snake.getHead().y + move.getValue().y).equals(p) || 
 					snake.getHead().y + move.getValue().y < 0 ||
@@ -66,6 +71,7 @@ public class GameLogic{
 			lastMove = move;
 			if(gameMatrix[snake.getHead().y][snake.getHead().x] != 2) {
 				snake.getBody().removeFirst();
+				snake.reduceLife();
 			}else {
 				snake.eat();
 				//				foodPoints += 5;

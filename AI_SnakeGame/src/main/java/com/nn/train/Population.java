@@ -1,6 +1,5 @@
 package com.nn.train;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import com.logic.Snake;
@@ -13,14 +12,13 @@ public class Population {
 	private Snake[] snakes;
 	private Snake bestSnake;
 
-	private int bestSnakeScore = 0;
+//	private int bestSnakeScore = 0;
 	private int gen = 0;
-	private int samebest = 0;
+//	private int samebest = 0;
 
-	private float bestFitness = 0;
 	private float fitnessSum = 0;
 
-	ArrayList<Integer> evolution;
+//	ArrayList<Integer> evolution = new ArrayList<>();
 
 	public Population(int size) {
 		snakes = new Snake[size];
@@ -34,8 +32,8 @@ public class Population {
 			if (!snakes[i].isDead())
 				return false;
 		}
-		if (!bestSnake.isDead())
-			return false;
+//		if (!bestSnake.isDead())
+//			return false;
 		return true;
 	}
 
@@ -50,32 +48,35 @@ public class Population {
 			if (!snakes[i].isDead()) {
 				snakes[i].look();
 				snakes[i].thinkAndMove();
-//				snakes[i].move();
+//				System.out.println("--------------------");
+//				snakes[i].getBody().forEach(System.out::println);//			snakes[i].move();
 			}
 		}
 	}
 
 	public void setBestSnake() { // set the best snake of the generation
-		float max = 0;
-		int maxIndex = 0;
+//		float max = 0;
+//		int maxIndex = 0;
+		if(bestSnake == null)
+			bestSnake = snakes[0];
 		for (int i = 0; i < snakes.length; i++) {
-			if (snakes[i].getFitness() > max) {
-				max = (float) snakes[i].getFitness();
-				maxIndex = i;
+			if (snakes[i].calculateFitness() > bestSnake.calculateFitness()) {
+				bestSnake = snakes[i];
+				System.out.println("Setted best Snake "+bestSnake.getScore());
 			}
 		}
-		if (max > bestFitness) {
-			bestFitness = max;
-			bestSnakeScore = snakes[maxIndex].getScore();
+//		if (max > bestFitness) {
+//			bestFitness = max;
+//			bestSnakeScore = snakes[maxIndex].getScore();
 			// samebest = 0;
 			// mutationRate = defaultMutation;
-		} else {
+//		} else {
 			/*
 			 * samebest++; if(samebest > 2) { //if the best snake has remained the same for
 			 * more than 3 generations, raise the mutation rate mutationRate *= 2; samebest
 			 * = 0; }
 			 */
-		}
+//		}
 	}
 
 	public Snake selectParent() { // selects a random number in range of the fitnesssum and if a snake falls in
@@ -83,7 +84,7 @@ public class Population {
 		float rand = new Random().nextFloat() * fitnessSum;
 		float summation = 0;
 		for (int i = 0; i < snakes.length; i++) {
-			summation += snakes[i].getFitness();
+			summation += snakes[i].calculateFitness();
 			if (summation > rand) {
 				return snakes[i];
 			}
@@ -104,7 +105,7 @@ public class Population {
 			newSnakes[i] = child;
 		}
 		snakes = newSnakes.clone();
-		evolution.add(bestSnakeScore);
+//		evolution.add(bestSnakeScore);
 		gen += 1;
 	}
 
@@ -121,6 +122,6 @@ public class Population {
 	public void calculateFitnessSum() { // calculate the sum of all the snakes fitnesses
 		fitnessSum = 0;
 		for (int i = 0; i < snakes.length; i++)
-			fitnessSum += snakes[i].getFitness();
+			fitnessSum += snakes[i].calculateFitness();
 	}
 }
