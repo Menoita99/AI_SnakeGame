@@ -12,8 +12,7 @@ public class Food {
 	}																						
 	
 	public Food clone() {
-		Food clone = this;
-		return clone;
+		return this;
 	}
 	
 	
