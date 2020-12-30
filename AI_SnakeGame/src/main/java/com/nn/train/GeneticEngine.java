@@ -7,7 +7,8 @@ public class GeneticEngine {
 	
 
 	public static void main(String[] args) {
-		Population pop = new Population(1);
+		System.out.println("comecei");
+		Population pop = new Population(20);
 		int gens = 100;
 		int i = 0;
 		int bestScore = 0;
