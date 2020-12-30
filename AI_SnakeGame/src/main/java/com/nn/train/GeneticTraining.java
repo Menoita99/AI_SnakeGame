@@ -25,7 +25,7 @@ public class GeneticTraining implements Problem<List<NDArray> , DoubleGene ,Doub
 		return list -> {
 			NeuralNetwork neuralNetwork = new NeuralNetwork(list);
 			double play = neuralNetwork.play();
-			neuralNetwork.close();
+			//neuralNetwork.close();
 			return play;
 		};
 	}
