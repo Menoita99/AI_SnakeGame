@@ -1,16 +1,10 @@
 package com.gui;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-
 import com.logic.GameLogic;
 import com.logic.Moves;
 import com.neural.NeuralNetwork;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -39,15 +33,6 @@ public class Gui extends Application{
 		label = new Text("Score: "+ gl.getScore());
 		Button b = new Button("Play with nn");
 		b.setOnMouseClicked(event ->{
-			try {
-				File f = new File("C:\\Users\\Rui Menoita\\Desktop\\NeuralNetwork.nn");
-				NeuralNetwork nn = new NeuralNetwork();
-				MultiLayerNetwork loaded = MultiLayerNetwork.load(f, true);
-				nn.setMultiLayerNetwork(loaded);
-				playWithNeuralNetwork(nn);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		});
 		VBox root = new VBox();
 		Scene s = new Scene(root);
@@ -109,20 +94,6 @@ public class Gui extends Application{
 	
     
     public void playWithNeuralNetwork(NeuralNetwork nn) {
-    	while(!gl.isGameOver()) {
-	    	nn.setGl(gl);
-	    	gl.getSnake().forEach(System.out::println);
-	    	gl.moveSnake(nn.feedNetwork(nn.getInput()));
-	    	Platform.runLater(this::drawCanvas);
-	    	
-			label.setText("Score: "+ gl.getScore());
-	    	gl.getSnake().forEach(System.out::println);
-	    	try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-    	}
     	showErrorDialog("Game Over", "Final score: " + (gl.getFoodPoints() + gl.getSurvivingPoints()) + " point.");
     }
     

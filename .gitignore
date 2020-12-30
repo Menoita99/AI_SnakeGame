@@ -1,3 +1,5 @@
 
 AI_SnakeGame/target/classes/META-INF/maven/AI_SnakeGame/AI_SnakeGame/pom.properties
 *.log
+*.properties
+*.log

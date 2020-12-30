@@ -21,14 +21,14 @@ public class GeneticEngine {
 
 
 	public void setUpEngine() {
-		engine = Engine.builder(new GeneticTraining())
-				.optimize(Optimize.MAXIMUM)
-				.populationSize(50)
-				.offspringFraction(0.6)
-				.survivorsSelector (new TournamentSelector <>(5)) 
-				.offspringSelector (new RouletteWheelSelector <>() ) 
-				.alterers(new Mutator<>(0.02), new SinglePointCrossover<>(0.8))
-				.build();
+//		engine = Engine.builder(new GeneticTraining())
+//				.optimize(Optimize.MAXIMUM)
+//				.populationSize(50)
+//				.offspringFraction(0.6)
+//				.survivorsSelector (new TournamentSelector <>(5)) 
+//				.offspringSelector (new RouletteWheelSelector <>() ) 
+//				.alterers(new Mutator<>(0.02), new SinglePointCrossover<>(0.8))
+//				.build();
 		
 	}
 
@@ -45,14 +45,12 @@ public class GeneticEngine {
 	
 
 	public static void main(String[] args) {
-		EvolutionStatistics<Double,?> statistics = EvolutionStatistics.ofNumber();
+//		EvolutionStatistics<Double,?> statistics = EvolutionStatistics.ofNumber();
 		GeneticEngine gan = new GeneticEngine();
 		gan.setUpEngine();
 		File f = new File("C:\\Users\\Rui Menoita\\Desktop\\NeuralNetwork.nn");
 		try {
 			f.createNewFile();
-			
-			new NeuralNetwork(new GeneticTraining().decode(gan.evaluate(statistics).bestPhenotype().genotype())).getMultiLayerNetwork().save(f);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
