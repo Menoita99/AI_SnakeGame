@@ -22,8 +22,12 @@ public class GeneticTraining implements Problem<List<NDArray> , DoubleGene ,Doub
 	@Override
 	public Function<List<NDArray>, Double> fitness() {
 //		System.out.println("fitness");
-		
-		return list -> new NeuralNetwork(list).play();
+		return list -> {
+			NeuralNetwork neuralNetwork = new NeuralNetwork(list);
+			double play = neuralNetwork.play();
+			neuralNetwork.close();
+			return play;
+		};
 	}
 
 	@Override

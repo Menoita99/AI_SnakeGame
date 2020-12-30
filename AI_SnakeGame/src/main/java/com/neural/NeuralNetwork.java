@@ -164,19 +164,23 @@ public class NeuralNetwork {
 	public double play() {
 		Future<Integer> future = executor.submit(()->{
 			INDArray input;
-//			System.out.println(Thread.currentThread()+" Start playing");
+			//			System.out.println(Thread.currentThread()+" Start playing");
 			while (!gl.isGameOver()) {
 				input = getInput();
 				gl.moveSnake(feedNetwork(input));
 			}
-//			System.out.println(Thread.currentThread()+" Lost with "+ (gl.getFoodPoints() + gl.getSurvivingPoints()));
+			//			System.out.println(Thread.currentThread()+" Lost with "+ (gl.getFoodPoints() + gl.getSurvivingPoints()));
 			return gl.getFoodPoints() + gl.getSurvivingPoints();
 		});
 		try {
 			return future.get(250, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			return gl.getFoodPoints() + gl.getSurvivingPoints();
-			
+
 		}
+	}
+
+	public void close() {
+		this.multiLayerNetwork.close();
 	}
 }
