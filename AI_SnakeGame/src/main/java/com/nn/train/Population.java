@@ -5,6 +5,9 @@ import java.util.Random;
 
 import com.logic.Snake;
 
+import lombok.Data;
+
+@Data
 public class Population {
 
 	private Snake[] snakes;
