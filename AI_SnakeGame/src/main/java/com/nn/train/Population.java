@@ -12,6 +12,7 @@ public class Population implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
+	private int populationSize;
 	private Snake[] snakes;
 	private Snake bestSnake;
 	private Snake genBestSnake;
@@ -21,6 +22,7 @@ public class Population implements Serializable{
 	private float fitnessSum = 0;
 
 	public Population(int size) {
+		populationSize = size;
 		snakes = new Snake[size];
 		for (int i = 0; i < snakes.length; i++)
 			snakes[i] = new Snake();
@@ -102,5 +104,9 @@ public class Population implements Serializable{
 		fitnessSum = 0;
 		for (int i = 0; i < snakes.length; i++)
 			fitnessSum += snakes[i].calculateFitness();
+	}
+	
+	public float calculateAverageFitness() { // calculate the sum of all the snakes fitnesses
+		return fitnessSum/populationSize;
 	}
 }

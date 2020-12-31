@@ -30,8 +30,8 @@ public class GeneticEngine {
 	
 	public static void train(String[] args) throws InterruptedException {
 		System.out.println("comecei");
-		Population pop = new Population(100);
-		int gens = 1;
+		Population pop = new Population(150);
+		int gens = 2000;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
@@ -39,7 +39,7 @@ public class GeneticEngine {
 				pop.calculateFitness();
 				pop.naturalSelection();
 				System.out.println("----------------------------");
-				System.out.println("Gen : "+i+" Score: "+pop.getGenBestSnake().getScore()+" fitness "+pop.getGenBestSnake().calculateFitness());
+				System.out.println("Gen : "+i+" Score: "+pop.getGenBestSnake().getScore()+" fitness "+pop.getGenBestSnake().calculateFitness() +"\nAverage fitness:" + pop.calculateAverageFitness());
 				System.out.println("best of best Score: "+pop.getBestSnake().getScore()+" fitness "+pop.getBestSnake().calculateFitness());
 				System.out.println("Time "+(System.currentTimeMillis()-start));
 				start = System.currentTimeMillis();

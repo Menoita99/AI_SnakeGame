@@ -122,7 +122,7 @@ public class Gui extends Application{
 						System.out.println("Game Over"+ "Final score: " + sn.getScore() + " point.");
 						this.stop();
 					}
-					System.out.println("MOVE");
+					System.out.println(gl.getLastMove());
 					drawCanvas();
 					frame = 0;
 				}
