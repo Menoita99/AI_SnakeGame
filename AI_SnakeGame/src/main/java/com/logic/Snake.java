@@ -18,7 +18,7 @@ public class Snake {
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 200; // quantidade de movimentos até morrer
+	private int lifeLeft = 15; // quantidade de movimentos até morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 	//	private Moves move;
 
