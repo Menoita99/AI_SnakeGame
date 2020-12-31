@@ -9,20 +9,20 @@ import lombok.Data;
 
 @Data
 public class Snake {
-	private static final int maxLife = 25;
+	private static final int maxLife = 250;
 
-	private static final int FIELD = 5;
+	private static final int FIELD = 10;
 
-	private static final int eatLife = 15;
+	private static final int eatLife = 75;
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 15; // quantidade de movimentos até morrer
+	private int lifeLeft = 30; // quantidade de movimentos até morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
-	//	private Moves move;
+	//private Moves move;
 
-	//	private float  fitness = 0;
+	//private float fitness = 0;
 
 
 	private float[] vision = new float[24];
@@ -34,6 +34,7 @@ public class Snake {
 
 	private int width;
 	private int height;
+	private LinkedList<Food> foodPos = new LinkedList<>();
 
 	public Snake() {
 		gl = new GameLogic(FIELD, FIELD);
