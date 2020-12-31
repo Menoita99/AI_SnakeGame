@@ -1,5 +1,7 @@
 package com.gui;
 
+import java.awt.Point;
+
 import com.logic.GameLogic;
 import com.logic.Moves;
 import com.logic.Snake;

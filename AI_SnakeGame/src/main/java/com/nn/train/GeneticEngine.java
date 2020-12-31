@@ -31,6 +31,8 @@ public class GeneticEngine {
 				pop.update();
 			}
 		}
+		System.out.println("Saving best sanke");
+		pop.getBestSnake().save();
 		System.out.println("TEST BEST");
 		for (int j = 0; j < 10; j++) {
 			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
