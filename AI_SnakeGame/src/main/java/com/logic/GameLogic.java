@@ -7,15 +7,15 @@ import lombok.Data;
 @Data
 public class GameLogic{
 
-	private static final Random RANDOM = new Random(1);
+	private static final Random RANDOM = new Random();
 	private int width, height;
 	private int[][] gameMatrix;
 
 	private Snake snake;
 	private Point foodPos = new Point();
 	private boolean gameOver = false;
-	//	private int survivingPoints;
-	//	private int foodPoints;
+	private int survivingPoints;
+	private int foodPoints;
 	private Moves lastMove = Moves.UP;
 
 
@@ -54,7 +54,7 @@ public class GameLogic{
 			gameOver = true;
 			return;
 		}
-			
+
 		for(Point p : snake.getBody()) {
 			if(new Point(snake.getHead().x + move.getValue().x, snake.getHead().y + move.getValue().y).equals(p) || 
 					snake.getHead().y + move.getValue().y < 0 ||
@@ -67,14 +67,14 @@ public class GameLogic{
 		}
 		if(!gameOver) {
 			snake.getBody().add(new Point(snake.getHead().x + move.getValue().x, snake.getHead().y + move.getValue().y));
-			//			survivingPoints +=1;
+			survivingPoints +=1;
 			lastMove = move;
 			if(gameMatrix[snake.getHead().y][snake.getHead().x] != 2) {
 				snake.getBody().removeFirst();
 				snake.reduceLife();
 			}else {
 				snake.eat();
-				//				foodPoints += 5;
+				foodPoints += 50;
 				generateFood();
 			}
 		}
@@ -122,9 +122,9 @@ public class GameLogic{
 	//		System.out.println("Final score is: " + (foodPoints + survivingPoints) + " points.");
 	//	}
 
-	//	public int getScore() {
-	//		return foodPoints + survivingPoints;
-	//	}
+		public int getScore() {
+			return foodPoints + survivingPoints;
+		}
 
 	//	public void keyPressed(String key) {
 	//		if(key.equals("w")) {

@@ -11,6 +11,7 @@ public class Population {
 
 	private Snake[] snakes;
 	private Snake bestSnake;
+	private Snake genBestSnake;
 
 //	private int bestSnakeScore = 0;
 	private int gen = 0;
@@ -24,7 +25,7 @@ public class Population {
 		snakes = new Snake[size];
 		for (int i = 0; i < snakes.length; i++)
 			snakes[i] = new Snake();
-		bestSnake = snakes[0].clone();
+		bestSnake = new Snake(snakes[0].getBrain());
 	}
 
 	public boolean done() { // check if all the snakes in the population are dead
@@ -57,9 +58,13 @@ public class Population {
 	public void setBestSnake() { // set the best snake of the generation
 //		float max = 0;
 //		int maxIndex = 0;
-		if(bestSnake == null)
-			bestSnake = snakes[0];
+//		if(bestSnake == null)
+//			bestSnake = snakes[0];
+		genBestSnake = snakes[0];
 		for (int i = 0; i < snakes.length; i++) {
+			if (snakes[i].calculateFitness() > genBestSnake.calculateFitness()) {
+				genBestSnake = snakes[i];
+			}
 			if (snakes[i].calculateFitness() > bestSnake.calculateFitness()) {
 				bestSnake = snakes[i];
 				System.out.println("Setted best Snake "+bestSnake.getScore());
@@ -81,15 +86,23 @@ public class Population {
 
 	public Snake selectParent() { // selects a random number in range of the fitnesssum and if a snake falls in
 									// that range then select it
-		float rand = new Random().nextFloat() * fitnessSum;
-		float summation = 0;
-		for (int i = 0; i < snakes.length; i++) {
-			summation += snakes[i].calculateFitness();
-			if (summation > rand) {
-				return snakes[i];
-			}
+//		float rand = new Random().nextFloat() * fitnessSum;
+//		float summation = 0;
+//		for (int i = 0; i < snakes.length; i++) {
+//			summation += snakes[i].calculateFitness();
+//			if (summation > rand) {
+//				return snakes[i];
+//			}
+//		}
+//		return snakes[0];
+		//Tournament selection size 5
+		Snake winner = null;
+		for (int i = 0; i < 5 && i < snakes.length; i++) {
+			Snake snake = snakes[new Random().nextInt(snakes.length)];
+			if(winner == null || snake.calculateFitness() > winner.calculateFitness())
+				winner = snake;
 		}
-		return snakes[0];
+		return winner;
 	}
 
 	public void naturalSelection() {
@@ -97,9 +110,10 @@ public class Population {
 
 		setBestSnake();
 		calculateFitnessSum();
-
-		newSnakes[0] = bestSnake.clone(); // add the best snake of the prior generation into the new generation
-		for (int i = 1; i < snakes.length; i++) {
+		
+		newSnakes[0] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
+		newSnakes[1] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
+		for (int i = 2; i < snakes.length; i++) {
 			Snake child = selectParent().crossover(selectParent());
 			child.mutate();
 			newSnakes[i] = child;

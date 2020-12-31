@@ -9,7 +9,11 @@ import lombok.Data;
 
 @Data
 public class Snake {
+	private static final int maxLife = 25;
+
 	private static final int FIELD = 5;
+
+	private static final int eatLife = 15;
 
 	private GameLogic gl;
 
@@ -37,7 +41,15 @@ public class Snake {
 		this.height = gl.getHeight();
 		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
 		brain = new NeuralNetwork(24, 18, 4, 2);
-		score += 2;
+		gl.setSnake(this);
+	}
+
+	public Snake(NeuralNetwork brain) {
+		gl = new GameLogic(FIELD, FIELD);
+		this.width = gl.getWidth();
+		this.height = gl.getHeight();
+		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
+		this.brain = brain;
 		gl.setSnake(this);
 	}
 
@@ -81,13 +93,7 @@ public class Snake {
 		//		System.out.println("Eat "+lifeLeft);
 		lifetime++;
 		score ++;
-		if (lifeLeft < 500) {
-			if (lifeLeft > 400) {
-				lifeLeft = 500;
-			} else {
-				lifeLeft += 100;
-			}
-		}
+		lifeLeft = Math.min(lifeLeft+eatLife, maxLife);
 	}
 
 	//	public void shiftBody() { // shift the body to follow the head
@@ -123,16 +129,16 @@ public class Snake {
 	}
 
 	public float calculateFitness() { // calculate the fitness of the snake
-		float fitness = 0;
-		if (score < 10) {
-			fitness = (float) (Math.floor(lifetime * lifetime) * Math.pow(2, score));
-		} else {
-			fitness = (float) Math.floor(lifetime * lifetime);
-			fitness *= Math.pow(2, 10);
-			fitness *= (score - 9);
-		}
+//		float fitness = 0;
+//		if (score < 10) {
+//			fitness = (float) (Math.floor(lifetime * lifetime) * Math.pow(2, score));
+//		} else {
+//			fitness = (float) Math.floor(lifetime * lifetime);
+//			fitness *= Math.pow(2, 10);
+//			fitness *= (score - 9);
+//		}
 //		System.out.println("Score "+score+"  fitness "+fitness);
-		return fitness;
+		return gl.getScore();
 	}
 
 	public void look() { // look in all 8 directions and check for food, body and wall

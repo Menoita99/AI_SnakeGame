@@ -13,12 +13,15 @@ public class GeneticEngine {
 		int gens = 100;
 		int i = 0;
 		int bestScore = 0;
-		while ( i < gens) {
+		long start = System.currentTimeMillis();
+		while (i < gens) {
 			if(pop.done()) {
-				bestScore = pop.getBestSnake().getScore();
 				pop.calculateFitness();
 				pop.naturalSelection();
-				System.out.println("Gen : "+i+" Score: "+bestScore);
+				System.out.println("Gen : "+i+" Score: "+pop.getGenBestSnake().getScore()+" fitness "+pop.getGenBestSnake().calculateFitness());
+				System.out.println("best of best : "+i+" Score: "+pop.getBestSnake().getScore()+" fitness "+pop.getBestSnake().calculateFitness());
+				System.out.println("Time "+(System.currentTimeMillis()-start));
+				start = System.currentTimeMillis();
 				i++;
 			} else {
 				pop.update();
@@ -27,7 +30,7 @@ public class GeneticEngine {
 		
 		new Thread(() -> Launch.main(args)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake());
+		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain());
 	}
 
 }

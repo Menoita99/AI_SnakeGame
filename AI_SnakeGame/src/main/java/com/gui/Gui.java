@@ -3,6 +3,7 @@ package com.gui;
 import com.logic.GameLogic;
 import com.logic.Moves;
 import com.logic.Snake;
+import com.neural.NeuralNetwork;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -100,9 +101,12 @@ public class Gui extends Application{
 	}
 
 
-	public void playWithNeuralNetwork(Snake sn) {
-		gl.setSnake(sn);
-		sn.setGl(gl);
+	public void playWithNeuralNetwork(NeuralNetwork n) {
+		Snake s = new Snake();
+		s.setGl(gl);
+		gl.setSnake(s);
+		s.setBrain(n);
+		
 		loop = new AnimationTimer() {
 
 			public int frame = 0;
@@ -111,10 +115,10 @@ public class Gui extends Application{
 			public void handle(long now) {
 				if(frame % 80 == 0) {
 					if(!gl.isGameOver()) {
-						sn.look();
-						sn.thinkAndMove();
+						s.look(); 
+						s.thinkAndMove();
 					}else {
-						System.out.println("Game Over"+ "Final score: " + sn.getScore() + " point.");
+						System.out.println("Game Over"+ "Final score: " + s.getScore() + " point.");
 						this.stop();
 					}
 					System.out.println("MOVE");
