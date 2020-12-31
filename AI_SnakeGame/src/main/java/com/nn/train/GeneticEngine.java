@@ -12,12 +12,12 @@ public class GeneticEngine {
 		Population pop = new Population(2000);
 		int gens = 100;
 		int i = 0;
-		int bestScore = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
 			if(pop.done()) {
 				pop.calculateFitness();
 				pop.naturalSelection();
+				System.out.println("----------------------------");
 				System.out.println("Gen : "+i+" Score: "+pop.getGenBestSnake().getScore()+" fitness "+pop.getGenBestSnake().calculateFitness());
 				System.out.println("best of best : "+i+" Score: "+pop.getBestSnake().getScore()+" fitness "+pop.getBestSnake().calculateFitness());
 				System.out.println("Time "+(System.currentTimeMillis()-start));
