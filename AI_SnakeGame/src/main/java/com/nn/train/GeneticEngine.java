@@ -9,8 +9,8 @@ public class GeneticEngine {
 
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("comecei");
-		Population pop = new Population(100);
-		int gens = 5000;
+		Population pop = new Population(500);
+		int gens = 200;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
