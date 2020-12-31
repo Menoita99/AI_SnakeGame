@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class Population {
 
+	private int populationSize;
 	private Snake[] snakes;
 	private Snake bestSnake;
 	private Snake genBestSnake;
@@ -22,6 +23,7 @@ public class Population {
 //	ArrayList<Integer> evolution = new ArrayList<>();
 
 	public Population(int size) {
+		populationSize = size;
 		snakes = new Snake[size];
 		for (int i = 0; i < snakes.length; i++)
 			snakes[i] = new Snake();
@@ -138,5 +140,9 @@ public class Population {
 		fitnessSum = 0;
 		for (int i = 0; i < snakes.length; i++)
 			fitnessSum += snakes[i].calculateFitness();
+	}
+	
+	public float calculateAverageFitness() { // calculate the sum of all the snakes fitnesses
+		return fitnessSum/populationSize;
 	}
 }
