@@ -19,6 +19,7 @@ public class Population {
 //	private int samebest = 0;
 
 	private float fitnessSum = 0;
+	private int scoreSum = 0;
 
 //	ArrayList<Integer> evolution = new ArrayList<>();
 
@@ -112,6 +113,7 @@ public class Population {
 
 		setBestSnake();
 		calculateFitnessSum();
+		calculateScoreSum();
 		mutate();
 		
 //		newSnakes[1] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
@@ -142,7 +144,17 @@ public class Population {
 			fitnessSum += snakes[i].calculateFitness();
 	}
 	
+	public void calculateScoreSum() { // calculate the sum of all the snakes fitnesses
+		scoreSum = 0;
+		for (int i = 0; i < snakes.length; i++)
+			scoreSum += snakes[i].getScore();
+	}
+	
 	public float calculateAverageFitness() { // calculate the sum of all the snakes fitnesses
 		return fitnessSum/populationSize;
+	}
+	
+	public int calculateAverageScore() {
+		return scoreSum/populationSize;
 	}
 }

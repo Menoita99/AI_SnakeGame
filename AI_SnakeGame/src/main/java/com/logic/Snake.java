@@ -273,7 +273,7 @@ public class Snake implements Serializable {
 	public void save() {
 		File f = new File("BestSnake.snake");
 		try(ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)))) {
-			out.writeObject(f);
+			out.writeObject(this);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
