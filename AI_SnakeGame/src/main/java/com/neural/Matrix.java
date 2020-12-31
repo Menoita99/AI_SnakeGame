@@ -1,11 +1,14 @@
 package com.neural;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import lombok.Data;
 
 @Data
-public class Matrix {
+public class Matrix implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
 	private int rows, cols;
 	private float[][] matrix;

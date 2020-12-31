@@ -1,5 +1,6 @@
 package com.nn.train;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import com.logic.Snake;
@@ -7,21 +8,19 @@ import com.logic.Snake;
 import lombok.Data;
 
 @Data
-public class Population {
+public class Population implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
 	private int populationSize;
 	private Snake[] snakes;
 	private Snake bestSnake;
 	private Snake genBestSnake;
 
-//	private int bestSnakeScore = 0;
 	private int gen = 0;
-//	private int samebest = 0;
 
 	private float fitnessSum = 0;
 	private int scoreSum = 0;
-
-//	ArrayList<Integer> evolution = new ArrayList<>();
 
 	public Population(int size) {
 		populationSize = size;
@@ -36,33 +35,19 @@ public class Population {
 			if (!snakes[i].isDead())
 				return false;
 		}
-//		if (!bestSnake.isDead())
-//			return false;
 		return true;
 	}
 
-	public void update() { // update all the snakes in the generation
-//		if (!bestSnake.isDead()) { // if the best snake is not dead update it, this snake is a replay of the best
-//									// from the past generation
-//			bestSnake.look();
-//			bestSnake.think();
-//			bestSnake.move();
-//		}
+	public void update() { 
 		for (int i = 0; i < snakes.length; i++) {
 			if (!snakes[i].isDead()) {
 				snakes[i].look();
 				snakes[i].thinkAndMove();
-//				System.out.println("--------------------");
-//				snakes[i].getBody().forEach(System.out::println);//			snakes[i].move();
 			}
 		}
 	}
 
 	public void setBestSnake() { // set the best snake of the generation
-//		float max = 0;
-//		int maxIndex = 0;
-//		if(bestSnake == null)
-//			bestSnake = snakes[0];
 		genBestSnake = snakes[0];
 		for (int i = 0; i < snakes.length; i++) {
 			if (snakes[i].calculateFitness() > genBestSnake.calculateFitness()) {
@@ -73,32 +58,11 @@ public class Population {
 				System.out.println("Setted best Snake "+bestSnake.getScore());
 			}
 		}
-//		if (max > bestFitness) {
-//			bestFitness = max;
-//			bestSnakeScore = snakes[maxIndex].getScore();
-			// samebest = 0;
-			// mutationRate = defaultMutation;
-//		} else {
-			/*
-			 * samebest++; if(samebest > 2) { //if the best snake has remained the same for
-			 * more than 3 generations, raise the mutation rate mutationRate *= 2; samebest
-			 * = 0; }
-			 */
-//		}
 	}
-
-	public Snake selectParent() { // selects a random number in range of the fitnesssum and if a snake falls in
-									// that range then select it
-//		float rand = new Random().nextFloat() * fitnessSum;
-//		float summation = 0;
-//		for (int i = 0; i < snakes.length; i++) {
-//			summation += snakes[i].calculateFitness();
-//			if (summation > rand) {
-//				return snakes[i];
-//			}
-//		}
-//		return snakes[0];
-		//Tournament selection size 5
+	
+	//Tournament selection size 5
+	public Snake selectParent() { 
+		
 		Snake winner = null;
 		for (int i = 0; i < 5 && i < snakes.length; i++) {
 			Snake snake = snakes[new Random().nextInt(snakes.length)];

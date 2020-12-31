@@ -272,17 +272,18 @@ public class Snake implements Serializable {
 
 	public void save() {
 		File f = new File("BestSnake.snake");
-		try(ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)))) {
+		f.delete();
+		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
 			out.writeObject(this);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Snake load(String path) {
+	public static Snake load(String path) {
 		File f = new File(path);
-		try(ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(f)))) {
-			return (Snake)in.readObject();
+		try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(f))) {
+			return (Snake) in.readObject();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
