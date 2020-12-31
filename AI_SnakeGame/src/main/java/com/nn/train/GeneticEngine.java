@@ -4,6 +4,7 @@ package com.nn.train;
 import com.gui.Gui;
 import com.gui.Launch;
 import com.logic.Snake;
+import com.neural.NeuralNetwork;
 
 
 public class GeneticEngine {
@@ -13,7 +14,7 @@ public class GeneticEngine {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("comecei");
 		Population pop = new Population(1000);
-		int gens = 400;
+		int gens = 500;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
@@ -31,8 +32,9 @@ public class GeneticEngine {
 			}
 		}
 		System.out.println("TEST BEST");
+		NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
 		for (int j = 0; j < 3; j++) {
-			Snake s = new Snake(pop.getBestSnake().getBrain());
+			Snake s = new Snake(brain);
 			while(!s.isDead()) {
 				s.look();
 				s.thinkAndMove();
@@ -41,7 +43,7 @@ public class GeneticEngine {
 		}
 		new Thread(() -> Launch.main(args)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain());
+		Gui.getINSTANCE().playWithNeuralNetwork(brain);
 	}
 
 }
