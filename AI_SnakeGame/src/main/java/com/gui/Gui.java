@@ -25,19 +25,19 @@ import javafx.stage.Stage;
 public class Gui extends Application{
 
 	private GameLogic gl;
-	private int width = 7;
-	private int height = 7;
+	private int width = 10;
+	private int height = 10;
 	private GraphicsContext gc;
 	private Text label;
 	private static final int BLOCK_SIZE = 20;	
 	private static Gui INSTANCE;
 	private AnimationTimer loop;
+	private Snake sn = new Snake();
 
 	@Override
 	public void start(Stage window) throws Exception {
 		INSTANCE = this;
 		gl = new GameLogic(width, height);
-		Snake sn = new Snake();
 		gl.setSnake(sn);
 		window.setTitle("Snake Game");
 		label = new Text("Score: "+ sn.getScore());
@@ -87,6 +87,7 @@ public class Gui extends Application{
 				gc.fillRect(j * BLOCK_SIZE,i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
 			}
 		}
+		label.setText("Score: "+ sn.getScore() + "\nSteps left: " + sn.getLifeLeft());
 	}
 
 	/*
@@ -104,11 +105,10 @@ public class Gui extends Application{
 
 
 	public void playWithNeuralNetwork(NeuralNetwork n) {
-		Snake s = new Snake(n);
-		s.getBody().clear();
-		s.getBody().add(new Point(5,5));
-		s.setGl(gl);
-		gl.setSnake(s);
+		sn = new Snake();
+		sn.setGl(gl);
+		gl.setSnake(sn);
+		sn.setBrain(n);
 		
 		loop = new AnimationTimer() {
 
@@ -116,12 +116,12 @@ public class Gui extends Application{
 
 			@Override
 			public void handle(long now) {
-				if(frame % 80 == 0) {
+				if(frame % 20 == 0) {
 					if(!gl.isGameOver()) {
-						s.look(); 
-						s.thinkAndMove();
+						sn.look(); 
+						sn.thinkAndMove();
 					}else {
-						System.out.println("Game Over"+ "Final score: " + s.getScore() + " point.");
+						System.out.println("Game Over"+ "Final score: " + sn.getScore() + " point.");
 						this.stop();
 					}
 					System.out.println("MOVE");

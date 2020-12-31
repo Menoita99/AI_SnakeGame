@@ -20,20 +20,20 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 40;
+	private static final int maxLife = 250;
 
-	private static final int FIELD = 7;
+	private static final int FIELD = 10;
 
-	private static final int eatLife = 20;
+	private static final int eatLife = 75;
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 20; // quantidade de movimentos até morrer
+	private int lifeLeft = 30; // quantidade de movimentos atï¿½ morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
-	//	private Moves move;
+	//private Moves move;
 
-	//	private float  fitness = 0;
+	//private float fitness = 0;
 
 
 	private float[] vision = new float[24];
@@ -45,6 +45,7 @@ public class Snake implements Serializable {
 
 	private int width;
 	private int height;
+	private LinkedList<Food> foodPos = new LinkedList<>();
 
 	public Snake() {
 		gl = new GameLogic(FIELD, FIELD);
