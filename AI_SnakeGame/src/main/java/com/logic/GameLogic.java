@@ -1,11 +1,14 @@
 package com.logic;
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.Random;
 import lombok.Data;
 
 
 @Data
-public class GameLogic{
+public class GameLogic implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
 	private static final Random RANDOM = new Random();
 	private int width, height;

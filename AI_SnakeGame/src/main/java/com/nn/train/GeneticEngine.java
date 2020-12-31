@@ -12,9 +12,26 @@ public class GeneticEngine {
 
 
 	public static void main(String[] args) throws InterruptedException {
+		train(args);
+//		load();
+	}
+
+	
+	
+	public static void load() throws InterruptedException {
+		Snake s = Snake.load("BestSnake.snake");
+		new Thread(() -> Launch.main(null)).start();
+		Thread.sleep(1000);
+		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain());
+	}
+	
+	
+	
+	
+	public static void train(String[] args) throws InterruptedException {
 		System.out.println("comecei");
 		Population pop = new Population(100);
-		int gens = 3000;
+		int gens = 1;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {

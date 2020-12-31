@@ -1,11 +1,16 @@
 package com.neural;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class NeuralNetwork{
-	  
-	  int iNodes, hNodes, oNodes, hLayers;
+public class NeuralNetwork implements Serializable{
+	
+	
+	private static final long serialVersionUID = 1L;
+	
+	int iNodes, hNodes, oNodes, hLayers;
 	  Matrix[] weights;
 	  
 	  public NeuralNetwork(int input, int hidden, int output, int hiddenLayers) {
