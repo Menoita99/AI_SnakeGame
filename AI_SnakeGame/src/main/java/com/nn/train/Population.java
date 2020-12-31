@@ -110,6 +110,7 @@ public class Population {
 
 		setBestSnake();
 		calculateFitnessSum();
+		mutate();
 		
 		newSnakes[0] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
 		newSnakes[1] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
