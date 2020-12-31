@@ -13,8 +13,8 @@ public class GeneticEngine {
 
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("comecei");
-		Population pop = new Population(1000);
-		int gens = 500;
+		Population pop = new Population(300);
+		int gens = 1000;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
@@ -31,9 +31,11 @@ public class GeneticEngine {
 				pop.update();
 			}
 		}
+		System.out.println("Saving best sanke");
+		pop.getBestSnake().save();
 		System.out.println("TEST BEST");
-		NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
-		for (int j = 0; j < 3; j++) {
+		for (int j = 0; j < 10; j++) {
+			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
 			Snake s = new Snake(brain);
 			while(!s.isDead()) {
 				s.look();
@@ -43,7 +45,7 @@ public class GeneticEngine {
 		}
 		new Thread(() -> Launch.main(args)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(brain);
+		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone());
 	}
 
 }

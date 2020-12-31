@@ -1,6 +1,14 @@
 package com.logic;
 
 import java.awt.Point;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import com.neural.NeuralNetwork;
@@ -8,17 +16,20 @@ import com.neural.NeuralNetwork;
 import lombok.Data;
 
 @Data
-public class Snake {
-	private static final int maxLife = 25;
+public class Snake implements Serializable {
 
-	private static final int FIELD = 5;
+	private static final long serialVersionUID = 1L;
 
-	private static final int eatLife = 15;
+	private static final int maxLife = 40;
+
+	private static final int FIELD = 7;
+
+	private static final int eatLife = 20;
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 15; // quantidade de movimentos até morrer
+	private int lifeLeft = 20; // quantidade de movimentos até morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 	//	private Moves move;
 
@@ -256,5 +267,24 @@ public class Snake {
 	public void reduceLife() {
 		lifeLeft--;
 		lifetime++;
+	}
+
+	public void save() {
+		File f = new File("BestSnake.snake");
+		try(ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)))) {
+			out.writeObject(f);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Snake load(String path) {
+		File f = new File(path);
+		try(ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(f)))) {
+			return (Snake)in.readObject();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

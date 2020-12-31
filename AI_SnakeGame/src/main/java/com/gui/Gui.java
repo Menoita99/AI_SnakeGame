@@ -1,5 +1,7 @@
 package com.gui;
 
+import java.awt.Point;
+
 import com.logic.GameLogic;
 import com.logic.Moves;
 import com.logic.Snake;
@@ -23,8 +25,8 @@ import javafx.stage.Stage;
 public class Gui extends Application{
 
 	private GameLogic gl;
-	private int width = 5;
-	private int height = 5;
+	private int width = 7;
+	private int height = 7;
 	private GraphicsContext gc;
 	private Text label;
 	private static final int BLOCK_SIZE = 20;	
@@ -102,10 +104,11 @@ public class Gui extends Application{
 
 
 	public void playWithNeuralNetwork(NeuralNetwork n) {
-		Snake s = new Snake();
+		Snake s = new Snake(n);
+		s.getBody().clear();
+		s.getBody().add(new Point(5,5));
 		s.setGl(gl);
 		gl.setSnake(s);
-		s.setBrain(n);
 		
 		loop = new AnimationTimer() {
 

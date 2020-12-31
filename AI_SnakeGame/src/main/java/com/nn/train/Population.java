@@ -112,9 +112,9 @@ public class Population {
 		calculateFitnessSum();
 		mutate();
 		
-		newSnakes[0] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
-		newSnakes[1] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
-		for (int i = 2; i < snakes.length; i++) {
+//		newSnakes[1] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
+		newSnakes[0] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
+		for (int i = 1; i < snakes.length; i++) {
 			Snake child = selectParent().crossover(selectParent());
 			child.mutate();
 			newSnakes[i] = child;
