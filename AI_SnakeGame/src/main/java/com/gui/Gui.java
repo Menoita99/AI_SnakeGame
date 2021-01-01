@@ -1,5 +1,6 @@
 package com.gui;
 
+
 import com.logic.GameLogic;
 import com.logic.Moves;
 import com.logic.Snake;
@@ -21,7 +22,7 @@ import javafx.stage.Stage;
 
 
 public class Gui extends Application{
-
+ 
 	private GameLogic gl;
 	private int width = Snake.FIELD;
 	private int height = Snake.FIELD;
@@ -36,6 +37,7 @@ public class Gui extends Application{
 	public void start(Stage window) throws Exception {
 		INSTANCE = this;
 		gl = new GameLogic(width, height);
+		sn.setGl(gl);
 		gl.setSnake(sn);
 		window.setTitle("Snake Game");
 		label = new Text("Score: "+ sn.getScore());
@@ -103,7 +105,8 @@ public class Gui extends Application{
 
 
 	public void playWithNeuralNetwork(NeuralNetwork n) {
-		sn = new Snake();
+		sn = new Snake();		
+		sn.setBrain(n);
 		sn.setGl(gl);
 		gl.setSnake(sn);
 		sn.setBrain(n);
@@ -114,7 +117,7 @@ public class Gui extends Application{
 
 			@Override
 			public void handle(long now) {
-				if(frame % 1 == 0) {
+				if(frame % 5 == 0) {
 					if(!gl.isGameOver()) {
 						sn.look();
 						sn.thinkAndMove();

@@ -18,7 +18,7 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 500;
+	private static int maxLife = 500;
 
 	public static final int FIELD = 15;
 
