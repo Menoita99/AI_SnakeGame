@@ -23,8 +23,8 @@ import javafx.stage.Stage;
 public class Gui extends Application{
 
 	private GameLogic gl;
-	private int width = 10;
-	private int height = 10;
+	private int width = 5;
+	private int height = 5;
 	private GraphicsContext gc;
 	private Text label;
 	private static final int BLOCK_SIZE = 20;	
@@ -114,7 +114,7 @@ public class Gui extends Application{
 
 			@Override
 			public void handle(long now) {
-				if(frame % 5 == 0) {
+				if(frame % 80 == 0) {
 					if(!gl.isGameOver()) {
 						sn.look(); 
 						sn.thinkAndMove();
