@@ -20,14 +20,14 @@ public class Snake implements Serializable {
 
 	private static int maxLife = 500;
 
-	public static int FIELD = 20;
+	public static final int FIELD = 15;
 
-	private int eatLife = 150;
+	private static final int eatLife = 100;
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 30; // quantidade de movimentos at� morrer
+	private int lifeLeft = 150; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 
 	private float[] vision;
@@ -43,8 +43,8 @@ public class Snake implements Serializable {
 
 	private boolean isCostum;
 
-	
-	
+
+
 	public Snake(boolean isCostum) {
 		this.isCostum = isCostum;
 		gl = new GameLogic(FIELD, FIELD);
@@ -54,7 +54,7 @@ public class Snake implements Serializable {
 		brain = isCostum ? new NeuralNetwork(25, 18, 4, 2) : new NeuralNetwork(24, 18, 4, 2) ;
 		gl.setSnake(this);
 	}
-	
+
 	public Snake() {
 		gl = new GameLogic(FIELD, FIELD);
 		this.width = gl.getWidth();
@@ -116,7 +116,7 @@ public class Snake implements Serializable {
 		brain.mutate(0.05f); // threshhold for now
 	}
 
-	public float calculateFitness() { 
+	public float calculateFitness() {
 		return gl.getScore();
 	}
 
@@ -126,9 +126,9 @@ public class Snake implements Serializable {
 		else
 			standartLook();
 	}
-	
-	
-	
+
+
+
 	private void standartLook() {
 		vision = new float[24];
 		float[] temp = lookInDirection(new Point(-1, 0));
@@ -165,7 +165,7 @@ public class Snake implements Serializable {
 		vision[23] = temp[2];
 	}
 
-	
+
 	public void costumLook() {
 		vision = new float[25];
 		Point head = getHead();
@@ -174,7 +174,7 @@ public class Snake implements Serializable {
 		float ca = food.x - head.y;
 		float h = (float) Math.sqrt(Math.pow(co, 2)+Math.pow(ca, 2));
 		vision[24] = co/h;
-		
+
 		float[] temp = lookInDirection(new Point(-1, 0));
 		vision[0] = temp[0];
 		vision[1] = temp[1];
@@ -207,9 +207,9 @@ public class Snake implements Serializable {
 		vision[21] = temp[0];
 		vision[22] = temp[1];
 		vision[23] = temp[2];
-		
-		
-		
+
+
+
 //		float[] temp = lookInDirection(Moves.UP.getValue());
 //		vision[0] = temp[0];
 //		vision[1] = temp[1];
@@ -225,8 +225,8 @@ public class Snake implements Serializable {
 //		temp = lookInDirection(Moves.RIGHT.getValue());
 //		vision[9] = temp[0];
 //		vision[10] = temp[1];
-//		vision[11] = temp[2];	
-		
+//		vision[11] = temp[2];
+
 //		Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
 //		for (int i = 0; i < moves.length; i++) {
 //			Moves m = moves[i];
@@ -240,8 +240,8 @@ public class Snake implements Serializable {
 //			}
 //		}
 	}
-	
-	
+
+
 //	public void costumLook() {
 //		vision = new float[8];
 //		Point matrixCenter;
@@ -288,8 +288,8 @@ public class Snake implements Serializable {
 //			}
 //		}
 //	}
-	
-	
+
+
 
 	public float[] lookInDirection(Point direction) { // look in a direction and check for food, body and wall
 		float look[] = new float[3];
@@ -358,7 +358,7 @@ public class Snake implements Serializable {
 	}
 
 	public void save() {
-		File f = new File("BestSnake.snake");
+		File f = new File("NewBestSnake.snake");
 		f.delete();
 		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
 			out.writeObject(this);
