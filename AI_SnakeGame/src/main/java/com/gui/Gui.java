@@ -27,7 +27,7 @@ public class Gui extends Application{
 	private int height = Snake.FIELD;
 	private GraphicsContext gc;
 	private Text label;
-	private static final int BLOCK_SIZE = 25;	
+	private static final int BLOCK_SIZE = 25;
 	private static Gui INSTANCE;
 	private AnimationTimer loop;
 	private Snake sn = new Snake();
@@ -107,7 +107,7 @@ public class Gui extends Application{
 		sn.setGl(gl);
 		gl.setSnake(sn);
 		sn.setBrain(n);
-		
+
 		loop = new AnimationTimer() {
 
 			public int frame = 0;
@@ -116,7 +116,7 @@ public class Gui extends Application{
 			public void handle(long now) {
 				if(frame % 1 == 0) {
 					if(!gl.isGameOver()) {
-						sn.look(); 
+						sn.look();
 						sn.thinkAndMove();
 					}else {
 						System.out.println("Game Over"+ "Final score: " + sn.getScore() + " point.");

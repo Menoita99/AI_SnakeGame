@@ -37,7 +37,7 @@ public class GeneticEngine {
 		ArrayList<String> scores = new ArrayList<>();
 		ArrayList<String> fitnesses = new ArrayList<>();
 		Population pop = new Population(200);
-		
+
 		pop.getSnakes()[0] = Snake.load("ConsistentSnake.snake");
 		pop.getSnakes()[1] = Snake.load("BestSnakeBest.snake");
 		int gens = 500;

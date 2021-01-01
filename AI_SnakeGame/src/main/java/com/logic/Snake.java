@@ -29,12 +29,8 @@ public class Snake implements Serializable {
 	private int score = 1;
 	private int lifeLeft = 150; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
-	//private Moves move;
 
-	//private float fitness = 0;
-
-
-	private float[] vision = new float[24];
+	private float[] vision;
 	private float[] decision = new float[4];
 
 	private LinkedList<Point> body= new LinkedList<>();
@@ -44,6 +40,20 @@ public class Snake implements Serializable {
 	private int width;
 	private int height;
 	private LinkedList<Food> foodPos = new LinkedList<>();
+
+	private boolean isCostum;
+
+
+
+	public Snake(boolean isCostum) {
+		this.isCostum = isCostum;
+		gl = new GameLogic(FIELD, FIELD);
+		this.width = gl.getWidth();
+		this.height = gl.getHeight();
+		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
+		brain = isCostum ? new NeuralNetwork(25, 18, 4, 2) : new NeuralNetwork(24, 18, 4, 2) ;
+		gl.setSnake(this);
+	}
 
 	public Snake() {
 		gl = new GameLogic(FIELD, FIELD);
@@ -83,44 +93,12 @@ public class Snake implements Serializable {
 		return false;
 	}
 
-	//	public void move() { // move the snake
-	//		if (!dead) {
-	//			if (foodCollide(head.x, head.y)) {
-	//				eat();
-	//			}
-	//			shiftBody();
-	//			if (wallCollide(head.x, head.y)) {
-	//				dead = true;
-	//			} else if (bodyCollide(head.x, head.y)) {
-	//				dead = true;
-	//			} else if (lifeLeft <= 0) {
-	//				dead = true;
-	//			}
-	//		}
-	//	}
-
 	public void eat() { // eat food
 		//		System.out.println("Eat "+lifeLeft);
 		lifetime++;
 		score ++;
 		lifeLeft = Math.min(lifeLeft+eatLife, maxLife);
 	}
-
-	//	public void shiftBody() { // shift the body to follow the head
-	//		float tempx = head.x;
-	//		float tempy = head.y;
-	//		head.x += move.getValue().x;
-	//		head.y += move.getValue().y;
-	//		float temp2x;
-	//		float temp2y;
-	//		for (int i = 0; i < body.size(); i++) {
-	//			temp2x = body.get(i).x;
-	//			temp2y = body.get(i).y;
-	//			body.get(i).setLocation(tempx, tempy);
-	//			tempx = temp2x;
-	//			tempy = temp2y;
-	//		}
-	//	}
 
 	public Snake clone() { // clone the snake
 		Snake clone = new Snake();
@@ -138,20 +116,20 @@ public class Snake implements Serializable {
 		brain.mutate(0.05f); // threshhold for now
 	}
 
-	public float calculateFitness() { // calculate the fitness of the snake
-//		float fitness = 0;
-//		if (score < 10) {
-//			fitness = (float) (Math.floor(lifetime * lifetime) * Math.pow(2, score));
-//		} else {
-//			fitness = (float) Math.floor(lifetime * lifetime);
-//			fitness *= Math.pow(2, 10);
-//			fitness *= (score - 9);
-//		}
-//		System.out.println("Score "+score+"  fitness "+fitness);
+	public float calculateFitness() {
 		return gl.getScore();
 	}
 
 	public void look() { // look in all 8 directions and check for food, body and wall
+		if(isCostum)
+			costumLook();
+		else
+			standartLook();
+	}
+
+
+
+	private void standartLook() {
 		vision = new float[24];
 		float[] temp = lookInDirection(new Point(-1, 0));
 		vision[0] = temp[0];
@@ -186,11 +164,132 @@ public class Snake implements Serializable {
 		vision[22] = temp[1];
 		vision[23] = temp[2];
 	}
-	
-	
-	
-	
-	
+
+
+	public void costumLook() {
+		vision = new float[25];
+		Point head = getHead();
+		Point food = gl.getFoodPos();
+		float co = head.y - food.y;
+		float ca = food.x - head.y;
+		float h = (float) Math.sqrt(Math.pow(co, 2)+Math.pow(ca, 2));
+		vision[24] = co/h;
+
+		float[] temp = lookInDirection(new Point(-1, 0));
+		vision[0] = temp[0];
+		vision[1] = temp[1];
+		vision[2] = temp[2];
+		temp = lookInDirection(new Point(-1, -1));
+		vision[3] = temp[0];
+		vision[4] = temp[1];
+		vision[5] = temp[2];
+		temp = lookInDirection(new Point(0, -1));
+		vision[6] = temp[0];
+		vision[7] = temp[1];
+		vision[8] = temp[2];
+		temp = lookInDirection(new Point(1, -1));
+		vision[9] = temp[0];
+		vision[10] = temp[1];
+		vision[11] = temp[2];
+		temp = lookInDirection(new Point(1, 0));
+		vision[12] = temp[0];
+		vision[13] = temp[1];
+		vision[14] = temp[2];
+		temp = lookInDirection(new Point(1, 1));
+		vision[15] = temp[0];
+		vision[16] = temp[1];
+		vision[17] = temp[2];
+		temp = lookInDirection(new Point(0, 1));
+		vision[18] = temp[0];
+		vision[19] = temp[1];
+		vision[20] = temp[2];
+		temp = lookInDirection(new Point(-1, 1));
+		vision[21] = temp[0];
+		vision[22] = temp[1];
+		vision[23] = temp[2];
+
+
+
+//		float[] temp = lookInDirection(Moves.UP.getValue());
+//		vision[0] = temp[0];
+//		vision[1] = temp[1];
+//		vision[2] = temp[2];
+//		temp = lookInDirection(Moves.DOWN.getValue());
+//		vision[3] = temp[0];
+//		vision[4] = temp[1];
+//		vision[5] = temp[2];
+//		temp = lookInDirection(Moves.LEFT.getValue());
+//		vision[6] = temp[0];
+//		vision[7] = temp[1];
+//		vision[8] = temp[2];
+//		temp = lookInDirection(Moves.RIGHT.getValue());
+//		vision[9] = temp[0];
+//		vision[10] = temp[1];
+//		vision[11] = temp[2];
+
+//		Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
+//		for (int i = 0; i < moves.length; i++) {
+//			Moves m = moves[i];
+//			int valueAt = gl.getValueAt(new Point(head.x+ m.getValue().x,head.y + m.getValue().y));
+//			if(valueAt == 2) {
+//				vision[i*2] = 0;
+//				vision[i*2+1] = 1; //FOOD
+//			}else {
+//				vision[i*2] = valueAt;
+//				vision[i*2+1] = 0;
+//			}
+//		}
+	}
+
+
+//	public void costumLook() {
+//		vision = new float[8];
+//		Point matrixCenter;
+//		int count = 0;
+//		if (gl.getLastMove() == Moves.UP) {
+//			matrixCenter = new Point(getHead().x + gl.getLastMove().getValue().x, getHead().y + gl.getLastMove().getValue().y);
+//			for (int j = -1; j <= 1; j++) {
+//				for (int i = -1; i <= 1; i++) {
+//					if (!new Point(matrixCenter.x + i, matrixCenter.y + j).equals(getHead())) {
+//						vision[count] = (float) gl.getValueAt(new Point(matrixCenter.x + i, matrixCenter.y + j))-1;
+//						count++;
+//					}
+//				}
+//			}
+//		} else if (gl.getLastMove() == Moves.RIGHT) {
+//			matrixCenter = new Point(getHead().x + gl.getLastMove().getValue(). x,getHead().y + gl.getLastMove().getValue().y);
+//			for (int i = 1; i >= -1; i--) {
+//				for (int j = -1; j <= 1; j++) {
+//					if (!new Point(matrixCenter.x + i, matrixCenter.y + j).equals(getHead())) {
+//						vision[count] = (float) gl.getValueAt(new Point(matrixCenter.x + i, matrixCenter.y + j))-1;
+//						count++;
+//					}
+//				}
+//			}
+//		} else if (gl.getLastMove() == Moves.LEFT) {
+//			matrixCenter = new Point(getHead().x + gl.getLastMove().getValue().x,getHead().y + gl.getLastMove().getValue().y);
+//			for (int i = -1; i <= 1; i++) {
+//				for (int j = 1; j >= -1; j--) {
+//					if (!new Point(matrixCenter.x + i, matrixCenter.y + j).equals(getHead())) {
+//						vision[count] = (float) gl.getValueAt(new Point(matrixCenter.x + i, matrixCenter.y + j))-1;
+//						count++;
+//					}
+//				}
+//			}
+//		} else if (gl.getLastMove() == Moves.DOWN) {
+//			matrixCenter = new Point(getHead().x + gl.getLastMove().getValue().x, getHead().y + gl.getLastMove().getValue().y);
+//			for (int j = 1; j >= -1; j--) {
+//				for (int i = 1; i >= -1; i--) {
+//					if (!new Point(matrixCenter.x + i, matrixCenter.y + j).equals(getHead())) {
+//						vision[count] = (float)	 gl.getValueAt(new Point(matrixCenter.x + i, matrixCenter.y + j))-1;
+//						count++;
+//					}
+//				}
+//			}
+//		}
+//	}
+
+
 
 	public float[] lookInDirection(Point direction) { // look in a direction and check for food, body and wall
 		float look[] = new float[3];
@@ -244,21 +343,6 @@ public class Snake implements Serializable {
 		System.out.println("???????????????''");
 	}
 
-	//	public void moveUp() {
-	//		move = Moves.UP;
-	//	}
-	//
-	//	public void moveDown() {
-	//		move = Moves.DOWN;
-	//	}
-	//
-	//	public void moveLeft() {
-	//		move = Moves.LEFT;
-	//	}
-	//
-	//	public void moveRight() {
-	//		move = Moves.RIGHT;
-	//	}
 
 	public Point getHead(){
 		return body.getLast();
