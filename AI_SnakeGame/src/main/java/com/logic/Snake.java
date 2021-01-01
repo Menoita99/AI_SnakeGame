@@ -20,14 +20,14 @@ public class Snake implements Serializable {
 
 	private static final int maxLife = 500;
 
-	private static final int FIELD = 15;
+	public static final int FIELD = 15;
 
-	private static final int eatLife = 150;
+	private static final int eatLife = 100;
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 30; // quantidade de movimentos at� morrer
+	private int lifeLeft = 150; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 	//private Moves move;
 
@@ -274,7 +274,7 @@ public class Snake implements Serializable {
 	}
 
 	public void save() {
-		File f = new File("BestSnake.snake");
+		File f = new File("NewBestSnake.snake");
 		f.delete();
 		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
 			out.writeObject(this);

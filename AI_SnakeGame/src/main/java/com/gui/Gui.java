@@ -23,11 +23,11 @@ import javafx.stage.Stage;
 public class Gui extends Application{
 
 	private GameLogic gl;
-	private int width = 15;
-	private int height = 15;
+	private int width = Snake.FIELD;
+	private int height = Snake.FIELD;
 	private GraphicsContext gc;
 	private Text label;
-	private static final int BLOCK_SIZE = 20;	
+	private static final int BLOCK_SIZE = 25;	
 	private static Gui INSTANCE;
 	private AnimationTimer loop;
 	private Snake sn = new Snake();
@@ -114,7 +114,7 @@ public class Gui extends Application{
 
 			@Override
 			public void handle(long now) {
-				if(frame % 5 == 0) {
+				if(frame % 1 == 0) {
 					if(!gl.isGameOver()) {
 						sn.look(); 
 						sn.thinkAndMove();
