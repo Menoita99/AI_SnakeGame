@@ -30,8 +30,8 @@ public class GeneticEngine {
 	
 	public static void train(String[] args) throws InterruptedException {
 		System.out.println("comecei");
-		Population pop = new Population(300);
-		int gens = 5000;
+		Population pop = new Population(125);
+		int gens = 10000;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
