@@ -16,22 +16,26 @@ public class GeneticEngine {
 //		load();
 	}
 
-	
-	
+
+
 	public static void load() throws InterruptedException {
-		Snake s = Snake.load("BestSnake.snake");
+		Snake s = Snake.load("BestSnake(5).snake");
 		new Thread(() -> Launch.main(null)).start();
 		Thread.sleep(1000);
 		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain());
 	}
-	
-	
-	
-	
+
+
+
+
 	public static void train(String[] args) throws InterruptedException {
 		System.out.println("comecei");
-		Population pop = new Population(125);
-		int gens = 10000;
+		Population pop = new Population(100);
+		pop.getSnakes()[0] = Snake.load("BestSnake(4).snake");
+		pop.getSnakes()[1] = Snake.load("BestSnake(1).snake");
+		pop.getSnakes()[2] = Snake.load("BestSnake(2).snake");
+		pop.getSnakes()[3] = Snake.load("BestSnake(3).snake");
+		int gens = 1500;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
@@ -40,13 +44,17 @@ public class GeneticEngine {
 				pop.naturalSelection();
 				System.out.println("----------------------------");
 				System.out.println("Gen : "+i+" Score: "+pop.getGenBestSnake().getScore()+" fitness "+pop.getGenBestSnake().calculateFitness());
-						System.out.println("Gen: " + i + "|Average Score: " + pop.calculateAverageScore() +"|Average fitness:" + pop.calculateAverageFitness());
+				System.out.println("Gen: " + i + "|Average Score: " + pop.calculateAverageScore() +"|Average fitness:" + pop.calculateAverageFitness());
 				System.out.println("best of best Score: "+pop.getBestSnake().getScore()+" fitness "+pop.getBestSnake().calculateFitness());
 				System.out.println("Time "+(System.currentTimeMillis()-start));
 				start = System.currentTimeMillis();
 				i++;
 			} else {
 				pop.update();
+			}
+			if(i!= 0 && i%200 == 0) {
+				pop.getBestSnake().save();
+				System.out.println("Checkpoint");
 			}
 		}
 		System.out.println("Saving best sanke");
