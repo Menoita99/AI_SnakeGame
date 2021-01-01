@@ -18,11 +18,11 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 500;
+	private static int maxLife = 500;
 
-	private static final int FIELD = 5;
+	public static int FIELD = 20;
 
-	private static final int eatLife = 150;
+	private int eatLife = 150;
 
 	private GameLogic gl;
 

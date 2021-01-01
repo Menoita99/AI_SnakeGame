@@ -30,12 +30,12 @@ public class GeneticEngine {
 
 	public static void train(String[] args) throws InterruptedException {
 		System.out.println("comecei");
-		Population pop = new Population(1000);
-//		pop.getSnakes()[0] = Snake.load("BestSnake(4).snake");
-//		pop.getSnakes()[1] = Snake.load("BestSnake(1).snake");
-//		pop.getSnakes()[2] = Snake.load("BestSnake(2).snake");
-//		pop.getSnakes()[3] = Snake.load("BestSnake(3).snake");
-		int gens = 5000;
+		Population pop = new Population(150);
+//		pop.getSnakes()[0] = Snake.load("ConsistentSnake.snake");
+//		pop.getSnakes()[1] = Snake.load("ConsistentInvertedSnake.snake");
+		for(int i = 0; i< 20;i++)
+			pop.getSnakes()[i] = Snake.load("ConsistentSnake.snake").crossover(Snake.load("ConsistentInvertedSnake.snake"));
+		int gens = 1500;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
@@ -49,13 +49,14 @@ public class GeneticEngine {
 				System.out.println("Time "+(System.currentTimeMillis()-start));
 				start = System.currentTimeMillis();
 				i++;
+				if(i!= 0 && i%500 == 0) {
+					pop.getBestSnake().save();
+					System.out.println("Checkpoint");
+				}
 			} else {
 				pop.update();
 			}
-			if(i!= 0 && i%200 == 0) {
-				pop.getBestSnake().save();
-				System.out.println("Checkpoint");
-			}
+			
 		}
 		System.out.println("Saving best sanke");
 		pop.getBestSnake().save();
