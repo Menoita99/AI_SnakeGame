@@ -30,12 +30,12 @@ public class GeneticEngine {
 	
 	public static void train(String[] args) throws InterruptedException {
 		System.out.println("comecei");
-		Population pop = new Population(100);
-		pop.getSnakes()[0] = Snake.load("BestSnake(4).snake");
-		pop.getSnakes()[1] = Snake.load("BestSnake(1).snake");
-		pop.getSnakes()[2] = Snake.load("BestSnake(2).snake");
-		pop.getSnakes()[3] = Snake.load("BestSnake(3).snake");
-		int gens = 1500;
+		Population pop = new Population(1000,true);
+//		pop.getSnakes()[0] = Snake.load("BestSnake(4).snake");
+//		pop.getSnakes()[1] = Snake.load("BestSnake(1).snake");
+//		pop.getSnakes()[2] = Snake.load("BestSnake(2).snake");
+//		pop.getSnakes()[3] = Snake.load("BestSnake(3).snake");
+		int gens = 5000;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {

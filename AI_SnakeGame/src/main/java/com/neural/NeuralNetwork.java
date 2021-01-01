@@ -41,8 +41,6 @@ public class NeuralNetwork implements Serializable{
 	  }
 	  
 	  
-	  
-	  
 	  public float[] output(float[] inputsArr) {
 	     Matrix inputs = weights[0].singleColumnMatrixFromArray(inputsArr);
 	     
