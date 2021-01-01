@@ -36,11 +36,12 @@ public class GeneticEngine {
 		ArrayList<String> genarations = new ArrayList<>();
 		ArrayList<String> scores = new ArrayList<>();
 		ArrayList<String> fitnesses = new ArrayList<>();
-		Population pop = new Population(200);
+		Population pop = new Population(100);
 
 		pop.getSnakes()[0] = Snake.load("ConsistentSnake.snake");
 		pop.getSnakes()[1] = Snake.load("BestSnakeBest.snake");
-		int gens = 500;
+		pop.getSnakes()[2] = Snake.load("ConsistentInvertedSnake.snake");
+		int gens = 250;
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
