@@ -1,8 +1,6 @@
 package com.logic;
 
 import java.awt.Point;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,11 +18,11 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 250;
+	private static final int maxLife = 500;
 
-	private static final int FIELD = 10;
+	private static final int FIELD = 15;
 
-	private static final int eatLife = 75;
+	private static final int eatLife = 150;
 
 	private GameLogic gl;
 
@@ -188,6 +186,11 @@ public class Snake implements Serializable {
 		vision[22] = temp[1];
 		vision[23] = temp[2];
 	}
+	
+	
+	
+	
+	
 
 	public float[] lookInDirection(Point direction) { // look in a direction and check for food, body and wall
 		float look[] = new float[3];

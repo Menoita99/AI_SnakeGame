@@ -23,8 +23,8 @@ import javafx.stage.Stage;
 public class Gui extends Application{
 
 	private GameLogic gl;
-	private int width = 10;
-	private int height = 10;
+	private int width = 15;
+	private int height = 15;
 	private GraphicsContext gc;
 	private Text label;
 	private static final int BLOCK_SIZE = 20;	

@@ -89,7 +89,7 @@ public class Population implements Serializable{
 		}
 		snakes = newSnakes.clone();
 //		evolution.add(bestSnakeScore);
-		gen += 1;
+		gen += 1;	
 	}
 
 	public void mutate() {
