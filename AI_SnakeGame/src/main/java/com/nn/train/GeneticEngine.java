@@ -16,18 +16,18 @@ public class GeneticEngine {
 //		load();
 	}
 
-	
-	
+
+
 	public static void load() throws InterruptedException {
 		Snake s = Snake.load("BestSnake(5).snake");
 		new Thread(() -> Launch.main(null)).start();
 		Thread.sleep(1000);
 		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain());
 	}
-	
-	
-	
-	
+
+
+
+
 	public static void train(String[] args) throws InterruptedException {
 		System.out.println("comecei");
 		Population pop = new Population(1000,true);
