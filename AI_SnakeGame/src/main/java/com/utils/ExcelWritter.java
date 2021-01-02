@@ -1,5 +1,6 @@
 package com.utils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
@@ -15,12 +16,12 @@ public class ExcelWritter {
 
 	
 	
-    public static void write(ArrayList<String> generations, ArrayList<String> scores, ArrayList<String> fitness){
+    public static void write(ArrayList<String> generations, ArrayList<String> scores, ArrayList<String> fitness, String filename){
     	String [] columns = {"Generation", "Score", "Fitness"};
-    	
+    	File f = new File(filename+".csv");
         try{
         	Workbook workbook = new HSSFWorkbook();
-        	Sheet sh = workbook.createSheet("Statistics");
+        	Sheet sh = workbook.createSheet(filename);
         	Row headerRow = sh.createRow(0);
         	for (int i = 0; i < 3; i++) {
         		Cell cell = headerRow.createCell(i);
@@ -33,17 +34,15 @@ public class ExcelWritter {
         		row.createCell(1).setCellValue(scores.get(i));
         		row.createCell(2).setCellValue(fitness.get(i));
         	}
-        	
-        	FileOutputStream fileOut = new FileOutputStream("statistics.csv");
+        
+			FileOutputStream fileOut = new FileOutputStream(f);
         	workbook.write(fileOut);
         	workbook.close();
         	fileOut.close();
         	
-        	System.out.println("Excel file generated");
-        	
+        	System.out.println("Excel file generated on path: "+f.getPath());
         }catch (Exception e) {
-        	System.out.println("Error on writting excel");
+        	System.out.println("Error on writting excel on path: "+f.getPath());
 		}
-      
     }
 }

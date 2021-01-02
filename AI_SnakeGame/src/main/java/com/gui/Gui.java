@@ -22,16 +22,18 @@ import javafx.stage.Stage;
 
 
 public class Gui extends Application{
- 
+
 	private GameLogic gl;
 	private int width = Snake.FIELD;
 	private int height = Snake.FIELD;
 	private GraphicsContext gc;
 	private Text label;
-	private static final int BLOCK_SIZE = 25;
+	private static final int BLOCK_SIZE = 30;
 	private static Gui INSTANCE;
 	private AnimationTimer loop;
 	private Snake sn = new Snake();
+	private boolean loopStarted;
+	private Button nnButton;
 
 	@Override
 	public void start(Stage window) throws Exception {
@@ -41,14 +43,27 @@ public class Gui extends Application{
 		gl.setSnake(sn);
 		window.setTitle("Snake Game");
 		label = new Text("Score: "+ sn.getScore());
-		Button b = new Button("Play with nn");
-		b.setOnMouseClicked(event ->{
+
+		nnButton = new Button("Play with nn");
+		nnButton.setOnMouseClicked(event ->{
+			Snake s = Snake.load("NewBestSnake3.snake");
+			sn.setBrain(s.getBrain());
+			if(loopStarted) {
+				loop.stop();
+				loopStarted = false;
+				nnButton.setText("Play with nn");
+			}else {
+				loop.start();
+				loopStarted = true;
+				nnButton.setText("Stop nn");
+			}
+
 		});
 		VBox root = new VBox();
 		Scene s = new Scene(root);
 		Canvas canvas = new Canvas(width * BLOCK_SIZE, height * BLOCK_SIZE);
 		gc = canvas.getGraphicsContext2D();
-
+		initLoop();
 		drawCanvas();
 		s.setOnKeyPressed(key->{
 			if(key.getCode() == KeyCode.W || key.getCode() == KeyCode.UP) {
@@ -63,17 +78,40 @@ public class Gui extends Application{
 			drawCanvas();
 			if(gl.isGameOver())
 				showErrorDialog("Game Over", "Final score: " + sn.getScore() + " point.");
-			label.setText("Score: "+ sn.getScore());
 		});
-		root.getChildren().addAll(b,label,canvas);
+		root.getChildren().addAll(nnButton,label,canvas);
 		window.setScene(s);
 		window.show();
 
 	}
 
 
+	private void initLoop() {
+		loop = new AnimationTimer() {
+
+			public int frame = 0;
+
+			@Override
+			public void handle(long now) {
+				if(frame % 5 == 0) {
+					if(!gl.isGameOver()) {
+						sn.look();
+						sn.thinkAndMove();
+					}else {
+						System.out.println("Game Over"+ "Final score: " + sn.getScore() + " point.");
+						this.stop();
+					}
+					System.out.println(gl.getLastMove());
+					drawCanvas();
+					frame = 0;
+				}
+				frame++;
+			}
+		};
+	}
+
+
 	private void drawCanvas() {
-		gc.setStroke(Color.BLACK);
 		int [][] auxMatrix = gl.getGameMatrix();
 		for(int i = 0; i < auxMatrix.length; i++) {
 			for(int j = 0; j < auxMatrix[i].length; j++) {
@@ -101,39 +139,19 @@ public class Gui extends Application{
 		alert.setHeaderText(null);
 		alert.setContentText(Message);
 		alert.showAndWait();
+		System.exit(0);
 	}
 
 
 	public void playWithNeuralNetwork(NeuralNetwork n) {
-		sn = new Snake();		
+		sn = new Snake();
 		sn.setBrain(n);
 		sn.setGl(gl);
 		gl.setSnake(sn);
 		sn.setBrain(n);
-
-		loop = new AnimationTimer() {
-
-			public int frame = 0;
-
-			@Override
-			public void handle(long now) {
-				if(frame % 30 == 0) {
-					if(!gl.isGameOver()) {
-						sn.look();
-						sn.thinkAndMove();
-					}else {
-						System.out.println("Game Over"+ "Final score: " + sn.getScore() + " point.");
-						this.stop();
-					}
-					System.out.println(gl.getLastMove());
-					drawCanvas();
-					frame = 0;
-				}
-				frame++;
-			}
-		};    	
+		loopStarted = true;
+		nnButton.setText("Stop nn");
 		loop.start();
-
 	}
 
 
