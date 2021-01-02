@@ -20,14 +20,14 @@ public class Snake implements Serializable {
 
 	private static int maxLife = 500;
 
-	public static final int FIELD = 15;
+	public static final int FIELD = 5;
 
-	private static final int eatLife = 150;
+	private static final int eatLife = 50;
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 200; // quantidade de movimentos at� morrer
+	private int lifeLeft = 25; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 
 	private float[] vision;
@@ -113,7 +113,7 @@ public class Snake implements Serializable {
 	}
 
 	public void mutate() { // mutate the snakes brain
-		brain.mutate(0.05f); // threshhold for now
+		brain.mutate(0.01f); // threshhold for now
 	}
 
 	public float calculateFitness() {

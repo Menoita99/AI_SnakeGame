@@ -31,6 +31,12 @@ public class Population implements Serializable{
 			snakes[i] = new Snake();
 		bestSnake = new Snake(snakes[0].getBrain());
 	}
+	
+	public Population(Snake[] population) {
+		populationSize = population.length + 1;
+		snakes = population;
+		bestSnake = new Snake(snakes[0].getBrain());
+	}
 
 	public Population(int size, boolean useCostumInput) {
 		populationSize = size;
@@ -73,7 +79,6 @@ public class Population implements Serializable{
 	
 	//Tournament selection size 5
 	public Snake selectParent() { 
-		
 		Snake winner = null;
 		for (int i = 0; i < 5 && i < snakes.length; i++) {
 			Snake snake = snakes[new Random().nextInt(snakes.length)];
@@ -94,7 +99,7 @@ public class Population implements Serializable{
 //		newSnakes[1] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
 		newSnakes[0] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
 		for (int i = 1; i < snakes.length; i++) {
-			Snake child = selectParent().crossover(selectParent());
+			Snake child = snakes[i].crossover(selectParent());
 			child.mutate();
 			newSnakes[i] = child;
 		}

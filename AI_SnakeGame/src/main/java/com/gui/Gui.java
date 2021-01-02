@@ -117,7 +117,7 @@ public class Gui extends Application{
 
 			@Override
 			public void handle(long now) {
-				if(frame % 5 == 0) {
+				if(frame % 30 == 0) {
 					if(!gl.isGameOver()) {
 						sn.look();
 						sn.thinkAndMove();

@@ -39,22 +39,22 @@ public class GeneticEngine {
 //		pop.getSnakes()[1] = Snake.load("ConsistentInvertedSnake.snake");
 		for(int i = 0; i< 20;i++)
 			pop.getSnakes()[i] = Snake.load("ConsistentSnake.snake").crossover(Snake.load("ConsistentInvertedSnake.snake"));
-		int gens = 1500;
+		int gens = 500;
 		ArrayList<String> genarations = new ArrayList<>();
 		ArrayList<String> scores = new ArrayList<>();
 		ArrayList<String> fitnesses = new ArrayList<>();
-		Population pop = new Population(100);
-
-		pop.getSnakes()[0] = Snake.load("ConsistentSnake.snake");
-		pop.getSnakes()[1] = Snake.load("BestSnakeBest.snake");
-		pop.getSnakes()[2] = Snake.load("ConsistentInvertedSnake.snake");
-		int gens = 250;
+		Snake[] allBestSnakes = new Snake[gens];
+//
+//		pop.getSnakes()[0] = Snake.load("ConsistentSnake.snake");
+//		pop.getSnakes()[1] = Snake.load("BestSnakeBest.snake");
+//		pop.getSnakes()[2] = Snake.load("ConsistentInvertedSnake.snake");
 		int i = 0;
 		long start = System.currentTimeMillis();
 		while (i < gens) {
 			if(pop.done()) {
 				pop.calculateFitness();
 				pop.naturalSelection();
+				allBestSnakes[i] = pop.getBestSnake();
 				genarations.add(Integer.toString(i));
 				scores.add(Integer.toString(pop.calculateAverageScore()));
 				fitnesses.add(Float.toString(pop.calculateAverageFitness()));
@@ -78,18 +78,32 @@ public class GeneticEngine {
 		}
 		pop.getBestSnake().save();
 		ExcelWritter.write(genarations, scores, fitnesses);
-		for (int j = 0; j < 10; j++) {
-			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
-			Snake s = new Snake(brain);
-			while(!s.isDead()) {
-				s.look();
-				s.thinkAndMove();
-			}
-			System.out.println("Test "+j+" score "+s.getScore()+" fitness "+s.calculateFitness());
+//		for (int j = 0; j < 10; j++) {
+//			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
+//			Snake s = new Snake(brain);
+//			while(!s.isDead()) {
+//				s.look();
+//				s.thinkAndMove();
+//			}
+//			System.out.println("Test "+j+" score "+s.getScore()+" fitness "+s.calculateFitness());
+//		}
+		Population bestPop = new Population(allBestSnakes);
+		if(bestPop.done()) {
+			bestPop.calculateFitness();
+			bestPop.naturalSelection();
+			System.out.println("----------------------------");
+			System.out.println("Gen : "+i+" Score: "+bestPop.getGenBestSnake().getScore()+" fitness "+bestPop.getGenBestSnake().calculateFitness());
+			System.out.println("Gen: " + i + "|Average Score: " + bestPop.calculateAverageScore() +"|Average fitness:" + bestPop.calculateAverageFitness());
+			System.out.println("best of best Score: "+bestPop.getBestSnake().getScore()+" fitness "+bestPop.getBestSnake().calculateFitness());
+			System.out.println("Time "+(System.currentTimeMillis()-start));
+			start = System.currentTimeMillis();
+			i++;
+		}else {
+			bestPop.update();
 		}
 		new Thread(() -> Launch.main(args)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone());
+		Gui.getINSTANCE().playWithNeuralNetwork(bestPop.getBestSnake().getBrain().clone());
 	}
 
 }
