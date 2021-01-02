@@ -66,16 +66,14 @@ public class Population implements Serializable{
 			}
 			if (snakes[i].calculateFitness() > bestSnake.calculateFitness()) {
 				bestSnake = snakes[i];
-				System.out.println("Setted best Snake "+bestSnake.getScore());
 			}
 		}
 	}
 	
 	//Tournament selection size 5
 	public Snake selectParent() { 
-		
 		Snake winner = null;
-		for (int i = 0; i < 5 && i < snakes.length; i++) {
+		for (int i = 0; i < 7 && i < snakes.length; i++) {
 			Snake snake = snakes[new Random().nextInt(snakes.length)];
 			if(winner == null || snake.calculateFitness() > winner.calculateFitness())
 				winner = snake;
@@ -94,7 +92,7 @@ public class Population implements Serializable{
 //		newSnakes[1] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
 		newSnakes[0] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
 		for (int i = 1; i < snakes.length; i++) {
-			Snake child = selectParent().crossover(selectParent());
+			Snake child = snakes[i].crossover(selectParent());
 			child.mutate();
 			newSnakes[i] = child;
 		}
@@ -110,7 +108,7 @@ public class Population implements Serializable{
 
 	public void calculateFitness() { // calculate the fitnesses for each snake
 		for (int i = 0; i < snakes.length; i++)
-			snakes[i].calculateFitness();
+			snakes[i].calculateFitness(); 
 	}
 
 	public void calculateFitnessSum() { // calculate the sum of all the snakes fitnesses
