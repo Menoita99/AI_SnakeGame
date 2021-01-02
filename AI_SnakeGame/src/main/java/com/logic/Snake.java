@@ -18,16 +18,16 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 500;// 250;
+	private static final int maxLife = 100;//75;
 
-	public static final int FIELD = 7;
+	public static final int FIELD = 4;
 
-	private static final int eatLife = 75;//50
+	private static final int eatLife = 30;//25
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 50; // quantidade de movimentos at� morrer
+	private int lifeLeft = 35; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 
 	private float[] vision;
@@ -51,7 +51,7 @@ public class Snake implements Serializable {
 		this.width = gl.getWidth();
 		this.height = gl.getHeight();
 		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
-		brain = isCostum ? new NeuralNetwork(25, 18, 4, 2) : new NeuralNetwork(24, 18, 4, 2) ;
+		brain = isCostum ? new NeuralNetwork(25, 18, 4, 2) : new NeuralNetwork(12, 6, 4, 2) ;
 		gl.setSnake(this);
 	}
 
@@ -113,7 +113,7 @@ public class Snake implements Serializable {
 	}
 
 	public void mutate() { // mutate the snakes brain
-		brain.mutate(0.001f); // threshhold for now
+		brain.mutate(0.01f); // threshhold for now
 	}
 
 	public float calculateFitness() {
@@ -167,65 +167,65 @@ public class Snake implements Serializable {
 
 
 	public void costumLook() {
-		vision = new float[25];
+		vision = new float[13];
 		Point head = getHead();
 		Point food = gl.getFoodPos();
 		float co = head.y - food.y;
 		float ca = food.x - head.y;
 		float h = (float) Math.sqrt(Math.pow(co, 2)+Math.pow(ca, 2));
-		vision[24] = co/h;
-
-		float[] temp = lookInDirection(new Point(-1, 0));
-		vision[0] = temp[0];
-		vision[1] = temp[1];
-		vision[2] = temp[2];
-		temp = lookInDirection(new Point(-1, -1));
-		vision[3] = temp[0];
-		vision[4] = temp[1];
-		vision[5] = temp[2];
-		temp = lookInDirection(new Point(0, -1));
-		vision[6] = temp[0];
-		vision[7] = temp[1];
-		vision[8] = temp[2];
-		temp = lookInDirection(new Point(1, -1));
-		vision[9] = temp[0];
-		vision[10] = temp[1];
-		vision[11] = temp[2];
-		temp = lookInDirection(new Point(1, 0));
-		vision[12] = temp[0];
-		vision[13] = temp[1];
-		vision[14] = temp[2];
-		temp = lookInDirection(new Point(1, 1));
-		vision[15] = temp[0];
-		vision[16] = temp[1];
-		vision[17] = temp[2];
-		temp = lookInDirection(new Point(0, 1));
-		vision[18] = temp[0];
-		vision[19] = temp[1];
-		vision[20] = temp[2];
-		temp = lookInDirection(new Point(-1, 1));
-		vision[21] = temp[0];
-		vision[22] = temp[1];
-		vision[23] = temp[2];
-
-
-
-//		float[] temp = lookInDirection(Moves.UP.getValue());
+		vision[12] = co/h;
+//
+//		float[] temp = lookInDirection(new Point(-1, 0));
 //		vision[0] = temp[0];
 //		vision[1] = temp[1];
 //		vision[2] = temp[2];
-//		temp = lookInDirection(Moves.DOWN.getValue());
+//		temp = lookInDirection(new Point(-1, -1));
 //		vision[3] = temp[0];
 //		vision[4] = temp[1];
 //		vision[5] = temp[2];
-//		temp = lookInDirection(Moves.LEFT.getValue());
+//		temp = lookInDirection(new Point(0, -1));
 //		vision[6] = temp[0];
 //		vision[7] = temp[1];
 //		vision[8] = temp[2];
-//		temp = lookInDirection(Moves.RIGHT.getValue());
+//		temp = lookInDirection(new Point(1, -1));
 //		vision[9] = temp[0];
 //		vision[10] = temp[1];
 //		vision[11] = temp[2];
+//		temp = lookInDirection(new Point(1, 0));
+//		vision[12] = temp[0];
+//		vision[13] = temp[1];
+//		vision[14] = temp[2];
+//		temp = lookInDirection(new Point(1, 1));
+//		vision[15] = temp[0];
+//		vision[16] = temp[1];
+//		vision[17] = temp[2];
+//		temp = lookInDirection(new Point(0, 1));
+//		vision[18] = temp[0];
+//		vision[19] = temp[1];
+//		vision[20] = temp[2];
+//		temp = lookInDirection(new Point(-1, 1));
+//		vision[21] = temp[0];
+//		vision[22] = temp[1];
+//		vision[23] = temp[2];
+
+
+
+		float[] temp = lookInDirection(Moves.UP.getValue());
+		vision[0] = temp[0];
+		vision[1] = temp[1];
+		vision[2] = temp[2];
+		temp = lookInDirection(Moves.DOWN.getValue());
+		vision[3] = temp[0];
+		vision[4] = temp[1];
+		vision[5] = temp[2];
+		temp = lookInDirection(Moves.LEFT.getValue());
+		vision[6] = temp[0];
+		vision[7] = temp[1];
+		vision[8] = temp[2];
+		temp = lookInDirection(Moves.RIGHT.getValue());
+		vision[9] = temp[0];
+		vision[10] = temp[1];
+		vision[11] = temp[2];
 
 //		Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
 //		for (int i = 0; i < moves.length; i++) {

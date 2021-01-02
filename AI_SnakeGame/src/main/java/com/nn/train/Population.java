@@ -1,7 +1,9 @@
 package com.nn.train;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.logic.Snake;
 
@@ -9,7 +11,7 @@ import lombok.Data;
 
 @Data
 public class Population implements Serializable{
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private int populationSize;
@@ -69,7 +71,7 @@ public class Population implements Serializable{
 			}
 		}
 	}
-	
+
 	//Tournament selection size 5
 	public Snake selectParent() { 
 		Snake winner = null;
@@ -82,24 +84,29 @@ public class Population implements Serializable{
 	}
 
 	public void naturalSelection() {
-		Snake[] newSnakes = new Snake[snakes.length];
-
 		setBestSnake();
 		calculateFitnessSum();
 		calculateScoreSum();
 		mutate();
-		
-//		newSnakes[1] = new Snake(bestSnake.getBrain()); // add the best snake of the prior generation into the new generation
-		newSnakes[0] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
-		for (int i = 1; i < snakes.length; i++) {
-			Snake child = snakes[i].crossover(selectParent());
-			child.mutate();
-			newSnakes[i] = child;
-		}
-		snakes = newSnakes.clone();
-//		evolution.add(bestSnakeScore);
-		gen += 1;	
+		mating();	
 	}
+
+	private void mating() {
+		snakes = Arrays.stream(snakes).sorted((s1,s2)-> (int)(s1.calculateFitness()-s2.calculateFitness())).collect(Collectors.toList()).toArray(snakes);
+		//		newSnakes[snakes.length-1] = new Snake(genBestSnake.getBrain()); // add the best snake of the prior generation into the new generation
+		for (int i = 1; i < snakes.length; i++) {
+			if(i < snakes.length*0.9) {
+				Snake child = snakes[i].crossover(selectParent());
+				child.mutate();
+				snakes[i] = child;
+			}else {
+				snakes[i] = new Snake(snakes[i].getBrain());
+			}
+		}
+		gen += 1;
+	}
+
+
 
 	public void mutate() {
 		for (int i = 1; i < snakes.length; i++) // start from 1 as to not override the best snake placed in index 0
@@ -116,17 +123,17 @@ public class Population implements Serializable{
 		for (int i = 0; i < snakes.length; i++)
 			fitnessSum += snakes[i].calculateFitness();
 	}
-	
+
 	public void calculateScoreSum() { // calculate the sum of all the snakes fitnesses
 		scoreSum = 0;
 		for (int i = 0; i < snakes.length; i++)
 			scoreSum += snakes[i].getScore();
 	}
-	
+
 	public float calculateAverageFitness() { // calculate the sum of all the snakes fitnesses
 		return fitnessSum/populationSize;
 	}
-	
+
 	public int calculateAverageScore() {
 		return scoreSum/populationSize;
 	}
