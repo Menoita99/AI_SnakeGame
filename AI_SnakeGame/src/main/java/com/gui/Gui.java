@@ -36,7 +36,7 @@ public class Gui extends Application{
 	private boolean loopStarted;
 	private Button nnButton;
 
-	@Override 
+	@Override
 	public void start(Stage window) throws Exception {
 		INSTANCE = this;
 		gl = new GameLogic(width, height);
@@ -49,7 +49,7 @@ public class Gui extends Application{
 		nnButton.setOnMouseClicked(event ->{
 			Snake s = Snake.load("NewBestSnake3.snake");
 			sn.setBrain(s.getBrain());
-			if(loopStarted) { 
+			if(loopStarted) {
 				loop.stop();
 				loopStarted = false;
 				nnButton.setText("Play with nn");
@@ -108,7 +108,7 @@ public class Gui extends Application{
 				}
 				frame++;
 			}
-		};  
+		};
 	}
 
 
@@ -145,7 +145,7 @@ public class Gui extends Application{
 
 
 	public void playWithNeuralNetwork(NeuralNetwork n) {
-		sn = new Snake();		
+		sn = new Snake();
 		sn.setBrain(n);
 		sn.setGl(gl);
 		gl.setSnake(sn);

@@ -33,6 +33,12 @@ public class Population implements Serializable{
 			snakes[i] = new Snake();
 		bestSnake = new Snake(snakes[0].getBrain());
 	}
+	
+	public Population(Snake[] population) {
+		populationSize = population.length + 1;
+		snakes = population;
+		bestSnake = new Snake(snakes[0].getBrain());
+	}
 
 	public Population(int size, boolean useCostumInput) {
 		populationSize = size;
