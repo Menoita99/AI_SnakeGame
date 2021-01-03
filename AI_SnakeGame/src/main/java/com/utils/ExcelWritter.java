@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class ExcelWritter {
 
-	
+	public static String root = "src/main/resources";
 	
     public static void write(ArrayList<String> generations, ArrayList<String> scores, ArrayList<String> fitness, String filename){
     	String [] columns = {"Generation", "Score", "Fitness"};
