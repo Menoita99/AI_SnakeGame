@@ -5,6 +5,7 @@ import com.logic.GameLogic;
 import com.logic.Moves;
 import com.logic.Snake;
 import com.neural.NeuralNetwork;
+import com.nn.train.GeneticEngine;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -32,7 +33,7 @@ public class Gui extends Application{
 	private static final int BLOCK_SIZE = 30;
 	private static Gui INSTANCE;
 	private AnimationTimer loop;
-	private Snake sn = new Snake();
+	private Snake sn = new Snake(GeneticEngine.isCostum);
 	private boolean loopStarted;
 	private Button nnButton;
 
@@ -47,7 +48,7 @@ public class Gui extends Application{
 
 		nnButton = new Button("Play with nn");
 		nnButton.setOnMouseClicked(event ->{
-			Snake s = Snake.load("NewBestSnake3.snake");
+			Snake s = Snake.load("NewBestSnake.snake");
 			sn.setBrain(s.getBrain());
 			if(loopStarted) {
 				loop.stop();
@@ -144,8 +145,8 @@ public class Gui extends Application{
 	}
 
 
-	public void playWithNeuralNetwork(NeuralNetwork n) {
-		sn = new Snake();
+	public void playWithNeuralNetwork(NeuralNetwork n,boolean isCostum) {
+		sn = new Snake(isCostum);
 		sn.setBrain(n);
 		sn.setGl(gl);
 		gl.setSnake(sn);

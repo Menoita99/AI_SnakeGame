@@ -73,6 +73,7 @@ public class Population implements Serializable{
 				genBestSnake = snakes[i];
 			}
 			if (snakes[i].calculateFitness() > bestSnake.calculateFitness()) {
+				System.out.println("SET BEST SNAKE");
 				bestSnake = snakes[i];
 			}
 		}
@@ -93,8 +94,8 @@ public class Population implements Serializable{
 		setBestSnake();
 		calculateFitnessSum();
 		calculateScoreSum();
-		mutate();
 		mating();	
+		mutate();
 	}
 
 	private void mating() {

@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class GameLogic implements Serializable{
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private static final Random RANDOM = new Random();
@@ -26,31 +26,20 @@ public class GameLogic implements Serializable{
 		this.width = width;
 		this.height = height;
 		gameMatrix = new int[width][height];
-		//		generateFood();
-		//		gameUpdate();
 	}
+
+
 
 	private void gameUpdate() {
-		gameMatrix = new int[width][height];
-		gameMatrix[foodPos.y][foodPos.x] = 2;
-		for(Point p : snake.getBody())
-			gameMatrix[p.y][p.x] = 1;
-		//printGame();
-		//printGame();
+		if(!gameOver) {
+			gameMatrix = new int[width][height];
+			gameMatrix[foodPos.y][foodPos.x] = 2;
+			for(Point p : snake.getBody())
+				gameMatrix[p.y][p.x] = 1;
+		}
 	}
 
-	//	private void gameLoop() {
-	//		Scanner scanner = new Scanner(System.in);
-	//		//gameUpdate();
-	//		while(!gameOver && scanner.hasNextLine()) {
-	//			String key = scanner.nextLine();
-	//			System.out.println(key.length());
-	//			keyPressed(key);
-	//			//gameUpdate();
-	//		}
-	//		scanner.close();
-	//		printScore();
-	//	}
+
 
 	public void moveSnake(Moves move) {
 		if(snake.getLifeLeft()<=0) {
@@ -85,6 +74,11 @@ public class GameLogic implements Serializable{
 	}
 
 	private void generateFood() {
+		if(snake.getBody().size() == width*height-1) {
+			foodPos = null;
+			gameOver = true;
+			return;
+		}
 		Point foodPosAux;
 		do {
 			foodPosAux = new Point(RANDOM.nextInt(width), RANDOM.nextInt(height));
@@ -110,39 +104,8 @@ public class GameLogic implements Serializable{
 	}
 
 
-	//	private void printGame() {
-	//		String rowAux = "";
-	//		 for (int row = 0; row < gameMatrix.length; row++) {
-	//			    for (int col = 0; col < gameMatrix[row].length; col++) {
-	//			    	rowAux += Integer.toString(gameMatrix[row][col]) + " ";
-	//			    }
-	//			    System.out.println(rowAux);
-	//			    rowAux ="";
-	//			 }
-	//	}
 
-	//	private void printScore() {
-	//		System.out.println("Final score is: " + (foodPoints + survivingPoints) + " points.");
-	//	}
-
-		public int getScore() {
-			return foodPoints + survivingPoints;
-		}
-
-	//	public void keyPressed(String key) {
-	//		if(key.equals("w")) {
-	//			moveSnake(Moves.UP);
-	//		}else if(key.equals("s")) {
-	//			moveSnake(Moves.DOWN);
-	//		}else if(key.equals("a")) {
-	//			moveSnake(Moves.LEFT);
-	//		}else if(key.equals("d")) {
-	//			moveSnake(Moves.RIGHT);
-	//		}
-	//	}
-
-	//	public static void main(String[] args) {
-	//		GameLogic gl = new GameLogic(10, 10);
-	//		gl.gameLoop();
-	//	}
+	public int getScore() {
+		return foodPoints + survivingPoints;
+	}
 }

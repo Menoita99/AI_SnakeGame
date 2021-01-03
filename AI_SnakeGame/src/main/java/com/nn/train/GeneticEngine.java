@@ -14,6 +14,11 @@ public class GeneticEngine {
 
 
 
+	public static final boolean isCostum = false;
+
+
+
+
 	public static void main(String[] args) throws InterruptedException {
 		train(args);
 //		load();
@@ -25,14 +30,14 @@ public class GeneticEngine {
 		Snake s = Snake.load("NewBestSnake.snake");
 		new Thread(() -> Launch.main(null)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain());
+		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain(),isCostum);
 	}
 
 
 
 
 	public static void train(String[] args) throws InterruptedException {
-		Population pop = new Population(100);
+		Population pop = new Population(150,isCostum);
 
 //		for(int i = 0; i< 10;i++) {
 //			pop.getSnakes()[i*4] = Snake.load("ConsistentSnake.snake").crossover(Snake.load("NewBestSnake6.snake"));
@@ -69,6 +74,7 @@ public class GeneticEngine {
 				i++;
 				if(i!= 0 && i%500 == 0) {
 					pop.getBestSnake().save();
+					pop.getGenBestSnake().save();
 					System.out.println("Checkpoint");
 				}
 			} else {
@@ -90,7 +96,7 @@ public class GeneticEngine {
 		}
 		new Thread(() -> Launch.main(args)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(bestPop.getBestSnake().getBrain().clone());
+		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone(),isCostum);
 	}
 
 }
