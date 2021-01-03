@@ -17,7 +17,7 @@ public class GameLogic implements Serializable{
 	private Snake snake;
 	private Point foodPos = new Point();
 	private boolean gameOver = false;
-	private int survivingPoints;
+	private float survivingPoints;
 	private int foodPoints;
 	private Moves lastMove = Moves.UP;
 
@@ -125,7 +125,7 @@ public class GameLogic implements Serializable{
 	//		System.out.println("Final score is: " + (foodPoints + survivingPoints) + " points.");
 	//	}
 
-		public int getScore() {
+		public float getScore() {
 			return foodPoints + survivingPoints;
 		}
 

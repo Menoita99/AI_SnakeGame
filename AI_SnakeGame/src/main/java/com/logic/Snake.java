@@ -20,9 +20,9 @@ public class Snake implements Serializable {
 
 	private static final int maxLife = 500;// 250;
 
-	public static final int FIELD = 7;
+	public static final int FIELD = 5;
 
-	private static final int eatLife = 75;//50
+	private static final int eatLife = 100;//50
 
 	private GameLogic gl;
 
@@ -113,7 +113,7 @@ public class Snake implements Serializable {
 	}
 
 	public void mutate() { // mutate the snakes brain
-		brain.mutate(0.001f); // threshhold for now
+		brain.mutate(0.005f); // threshhold for now
 	}
 
 	public float calculateFitness() {

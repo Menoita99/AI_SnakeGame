@@ -16,13 +16,13 @@ public class GeneticEngine {
 
 	public static void main(String[] args) throws InterruptedException {
 		train(args);
-//		load();
+		//load();
 	}
 
 
 
 	public static void load() throws InterruptedException {
-		Snake s = Snake.load("NewBestSnake3.snake");
+		Snake s = Snake.load("NewBestSnake.snake");
 		new Thread(() -> Launch.main(null)).start();
 		Thread.sleep(1000);
 		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain());
@@ -32,15 +32,15 @@ public class GeneticEngine {
 
 
 	public static void train(String[] args) throws InterruptedException {
-		Population pop = new Population(200);
+		Population pop = new Population(150);
 
-		for(int i = 0; i< 50;i++) {
-			pop.getSnakes()[i*3] = Snake.load("ConsistentSnake.snake").crossover(Snake.load("ConsistentInvertedSnake.snake"));
-			pop.getSnakes()[i*3+1] = Snake.load("NewBestSnake2.snake").crossover(Snake.load("NewBestSnake3.snake"));
-			pop.getSnakes()[i*3+2] = Snake.load("ConsistentInvertedSnake.snake").crossover(Snake.load("ConsistentInvertedSnake.snake"));
-		}
+//		for(int i = 0; i< 50;i++) {
+//			pop.getSnakes()[i*3] = Snake.load("ConsistentSnake.snake").crossover(Snake.load("ConsistentInvertedSnake.snake"));
+//			pop.getSnakes()[i*3+1] = Snake.load("NewBestSnake2.snake").crossover(Snake.load("NewBestSnake3.snake"));
+//			pop.getSnakes()[i*3+2] = Snake.load("ConsistentInvertedSnake.snake").crossover(Snake.load("NewBestSnake2.snake"));
+//		}
 
-		int gens = 1000;
+		int gens = 500;
 
 		ArrayList<String> genarations = new ArrayList<>();
 		ArrayList<String> scores = new ArrayList<>();
@@ -88,7 +88,7 @@ public class GeneticEngine {
 		}
 		new Thread(() -> Launch.main(args)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(bestPop.getBestSnake().getBrain().clone());
+		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone());
 	}
 
 }
