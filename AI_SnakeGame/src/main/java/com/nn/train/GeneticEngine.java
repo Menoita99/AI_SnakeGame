@@ -66,9 +66,9 @@ public class GeneticEngine {
 
 
 	public static void train(String[] args) throws InterruptedException {
-		Population pop = new Population(200,isCostum);
+		Population pop = new Population(100,isCostum);
 
-		pop.getSnakes()[0]= Snake.load("NewBestSnake.snake");
+		//pop.getSnakes()[0]= Snake.load("NewBestSnake.snake");
 		
 		int gens = 1000;
 
@@ -111,21 +111,21 @@ public class GeneticEngine {
 		}
 		pop.getBestSnake().save();
 
-		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"8_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
-
-		for (int j = 0; j < 10; j++) {
-			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
-			Snake s = new Snake(brain);
-			s.setCostum(isCostum);
-			while(!s.isDead()) {
-				s.look();
-				s.thinkAndMove();
-			}
-			System.out.println("Test "+j+" score "+s.getScore()+" fitness "+s.calculateFitness());
-		}
-		new Thread(() -> Launch.main(args)).start();
-		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone(),isCostum);
+		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"Our24_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
+//
+//		for (int j = 0; j < 10; j++) {
+//			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
+//			Snake s = new Snake(brain);
+//			s.setCostum(isCostum);
+//			while(!s.isDead()) {
+//				s.look();
+//				s.thinkAndMove();
+//			}
+//			System.out.println("Test "+j+" score "+s.getScore()+" fitness "+s.calculateFitness());
+//		}
+//		new Thread(() -> Launch.main(args)).start();
+//		Thread.sleep(1000);
+//		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone(),isCostum);
 	}
 
 }
