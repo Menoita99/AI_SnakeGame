@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 import com.neural.NeuralNetwork;
+import com.nn.train.GeneticEngine;
 
 import lombok.Data;
 
@@ -20,9 +21,9 @@ public class Snake implements Serializable {
 
 	private static final int maxLife = 75;//75;
 
-	public static final int FIELD = 5;
+	public static final int FIELD = 6;
 
-	private static final int eatLife = 100;//50
+	private static final int eatLife = 25;//50
 
 	private GameLogic gl;
 
@@ -51,7 +52,7 @@ public class Snake implements Serializable {
 		this.width = gl.getWidth();
 		this.height = gl.getHeight();
 		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
-		brain = isCostum ? new NeuralNetwork(13, 8, 4, 1) : new NeuralNetwork(25, 18, 4, 2) ;
+		brain = isCostum ? new NeuralNetwork(24, 18, 4, 2) : new NeuralNetwork(24, 18, 4, 2);
 		gl.setSnake(this);
 	}
 
@@ -115,7 +116,7 @@ public class Snake implements Serializable {
 	}
 
 	public void mutate() { // mutate the snakes brain
-		brain.mutate(0.005f); // threshhold for now
+		brain.mutate(GeneticEngine.motationRate);
 	}
 
 	public float calculateFitness() {
@@ -123,10 +124,10 @@ public class Snake implements Serializable {
 	}
 
 	public void look() { // look in all 8 directions and check for food, body and wall
-		if(isCostum)
-			costumLook();
-		else
-			standartLook();
+		//if(isCostum)
+		costumLook();
+		//else
+		//	standartLook();
 	}
 
 
@@ -198,45 +199,45 @@ public class Snake implements Serializable {
 
 
 
-	public void costumLook() {
-		vision = new float[13];
-		Point head = getHead();
-		Point food = gl.getFoodPos();
-		float co = head.y - food.y;
-		float ca = food.x - head.y;
-		float h = (float) Math.sqrt(Math.pow(co, 2)+Math.pow(ca, 2));
-		vision[12] = co/h;
-
-		float[] temp = lookInDirection(Moves.UP.getValue());
-		vision[0] = temp[0];
-		vision[1] = temp[1];
-		vision[2] = temp[2];
-		temp = lookInDirection(Moves.DOWN.getValue());
-		vision[3] = temp[0];
-		vision[4] = temp[1];
-		vision[5] = temp[2];
-		temp = lookInDirection(Moves.LEFT.getValue());
-		vision[6] = temp[0];
-		vision[7] = temp[1];
-		vision[8] = temp[2];
-		temp = lookInDirection(Moves.RIGHT.getValue());
-		vision[9] = temp[0];
-		vision[10] = temp[1];
-		vision[11] = temp[2];
-
-		Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
-		for (int i = 0; i < moves.length; i++) {
-			Moves m = moves[i];
-			int valueAt = gl.getValueAt(new Point(head.x+ m.getValue().x,head.y + m.getValue().y));
-			if(valueAt == 2) {
-				vision[i*2] = 0;
-				vision[i*2+1] = 1; //FOOD
-			}else {
-				vision[i*2] = valueAt;
-				vision[i*2+1] = 0;
-			}
-		}
-	}
+//	public void costumLook() {
+//		vision = new float[13];
+//		Point head = getHead();
+//		Point food = gl.getFoodPos();
+//		float co = head.y - food.y;
+//		float ca = food.x - head.y;
+//		float h = (float) Math.sqrt(Math.pow(co, 2)+Math.pow(ca, 2));
+//		vision[12] = co/h;
+//
+//		float[] temp = lookInDirection(Moves.UP.getValue());
+//		vision[0] = temp[0];
+//		vision[1] = temp[1];
+//		vision[2] = temp[2];
+//		temp = lookInDirection(Moves.DOWN.getValue());
+//		vision[3] = temp[0];
+//		vision[4] = temp[1];
+//		vision[5] = temp[2];
+//		temp = lookInDirection(Moves.LEFT.getValue());
+//		vision[6] = temp[0];
+//		vision[7] = temp[1];
+//		vision[8] = temp[2];
+//		temp = lookInDirection(Moves.RIGHT.getValue());
+//		vision[9] = temp[0];
+//		vision[10] = temp[1];
+//		vision[11] = temp[2];
+//
+//		Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
+//		for (int i = 0; i < moves.length; i++) {
+//			Moves m = moves[i];
+//			int valueAt = gl.getValueAt(new Point(head.x+ m.getValue().x,head.y + m.getValue().y));
+//			if(valueAt == 2) {
+//				vision[i*2] = 0;
+//				vision[i*2+1] = 1; //FOOD
+//			}else {
+//				vision[i*2] = valueAt;
+//				vision[i*2+1] = 0;
+//			}
+//		}
+//	}
 
 
 //	public void costumLook() {
@@ -285,6 +286,52 @@ public class Snake implements Serializable {
 //			}
 //		}
 //	}
+	
+	
+    public void costumLook() {
+        vision = new float[24];
+        Point head = getHead();
+
+        int count = 0;
+        Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                Point point = new Point(head.x-i,head.y-j);
+                int valueAt =  gl.getValueAt(point);
+                if(!getHead().equals(point)) {
+                    vision[count*2] = valueAt == 2 ? 1 : 0;
+                    vision[count*2+1] = valueAt == 1 ? 1 : 0;
+                    count++;
+                }
+            }
+        }
+        for (int i = 0; i < moves.length; i++) {
+            Moves m = moves[i];
+            int valueAt = gl.getValueAt(new Point(head.x - m.getValue().x*2,head.y - m.getValue().y*2));
+            vision[count*2] = valueAt == 2 ? 1 : 0;
+            vision[count*2+1] = valueAt == 1 ? 1 : 0;
+            count++;
+        }
+    }
+	
+	
+//    public void costumLook() {
+//        vision = new float[9];
+//        Point head = getHead();
+//        Point food = gl.getFoodPos();
+//        float co = head.y - food.y;
+//        float ca = food.x - head.y;
+//        float h = (float) Math.sqrt(Math.pow(co, 2)+Math.pow(ca, 2));
+//        vision[8] = co/h;
+//
+//        Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
+//        for (int i = 0; i < moves.length; i++) {
+//            Moves m = moves[i];
+//            int valueAt = gl.getValueAt(new Point(head.x+ m.getValue().x,head.y + m.getValue().y));
+//            vision[i*2] = valueAt == 2 ? 1 : 0;
+//            vision[i*2+1] = valueAt == 1 ? 1 : 0;
+//        }
+//    }
 
 
 

@@ -40,7 +40,7 @@ public class Gui extends Application{
 	@Override
 	public void start(Stage window) throws Exception {
 		INSTANCE = this;
-		gl = new GameLogic(width, height);
+		gl = new GameLogic(width, height, 1609720828786L);
 		sn.setGl(gl);
 		gl.setSnake(sn);
 		window.setTitle("Snake Game");
@@ -147,6 +147,7 @@ public class Gui extends Application{
 
 	public void playWithNeuralNetwork(NeuralNetwork n,boolean isCostum) {
 		sn = new Snake(isCostum);
+		System.out.println(n.getINodes());
 		sn.setBrain(n);
 		sn.setGl(gl);
 		gl.setSnake(sn);

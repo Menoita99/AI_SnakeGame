@@ -10,7 +10,7 @@ public class GameLogic implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Random RANDOM = new Random();
+	private Random random = new Random();
 	private int width, height;
 	private int[][] gameMatrix;
 
@@ -26,6 +26,15 @@ public class GameLogic implements Serializable{
 		this.width = width;
 		this.height = height;
 		gameMatrix = new int[width][height];
+	}
+
+
+
+	public GameLogic(int width, int height, long seed) {
+		this.width = width;
+		this.height = height;
+		gameMatrix = new int[width][height];
+		random = new Random(seed);
 	}
 
 
@@ -81,7 +90,7 @@ public class GameLogic implements Serializable{
 		}
 		Point foodPosAux;
 		do {
-			foodPosAux = new Point(RANDOM.nextInt(width), RANDOM.nextInt(height));
+			foodPosAux = new Point(random.nextInt(width), random.nextInt(height));
 		}while(snake.getBody().contains(foodPosAux));
 		foodPos = foodPosAux;
 		//System.out.println("Food generated at: (" + foodPos.x + ", " + foodPos.y + ")");
@@ -105,7 +114,7 @@ public class GameLogic implements Serializable{
 
 
 
-	public int getScore() {
+	public float getScore() {
 		return foodPoints + survivingPoints;
 	}
 }

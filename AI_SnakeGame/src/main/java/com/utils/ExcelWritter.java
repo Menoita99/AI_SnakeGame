@@ -14,16 +14,16 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class ExcelWritter {
 
-	public static String root = "src/main/resources";
+	public static String root = "Statistics/";
 	
-    public static void write(ArrayList<String> generations, ArrayList<String> scores, ArrayList<String> fitness, String filename){
-    	String [] columns = {"Generation", "Score", "Fitness"};
-    	File f = new File(filename+".csv");
+    public static void write(ArrayList<String> generations, ArrayList<String> scores, ArrayList<String> fitness,ArrayList<String> bestScorePerGen, ArrayList<String> bestFitnessPerGen, String filename){
+    	String [] columns = {"Generation", "Score", "Fitness", "Best Score", "Best Fitness"};
+    	File f = new File(root + filename+".csv");
         try{
         	Workbook workbook = new HSSFWorkbook();
         	Sheet sh = workbook.createSheet(filename);
         	Row headerRow = sh.createRow(0);
-        	for (int i = 0; i < 3; i++) {
+        	for (int i = 0; i < 5; i++) {
         		Cell cell = headerRow.createCell(i);
 				cell.setCellValue(columns[i]);
 			}
@@ -33,6 +33,8 @@ public class ExcelWritter {
         		row.createCell(0).setCellValue(generations.get(i));
         		row.createCell(1).setCellValue(scores.get(i));
         		row.createCell(2).setCellValue(fitness.get(i));
+        		row.createCell(3).setCellValue(bestScorePerGen.get(i));
+        		row.createCell(4).setCellValue(bestFitnessPerGen.get(i));
         	}
         
 			FileOutputStream fileOut = new FileOutputStream(f);
