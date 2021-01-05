@@ -19,22 +19,22 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 75;//75;
+	private static final int maxLife = 75;// 75;
 
 	public static final int FIELD = 6;
 
-	private static final int eatLife = 25;//50
+	private static final int eatLife = 50;// 50
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 20; // quantidade de movimentos at� morrer
+	private int lifeLeft = 25; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 
 	private float[] vision;
 	private float[] decision = new float[4];
 
-	private LinkedList<Point> body= new LinkedList<>();
+	private LinkedList<Point> body = new LinkedList<>();
 
 	private NeuralNetwork brain;
 
@@ -44,15 +44,13 @@ public class Snake implements Serializable {
 
 	private boolean isCostum;
 
-
-
 	public Snake(boolean isCostum) {
 		this.isCostum = isCostum;
 		gl = new GameLogic(FIELD, FIELD);
 		this.width = gl.getWidth();
 		this.height = gl.getHeight();
 		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
-		brain = isCostum ? new NeuralNetwork(24, 18, 4, 2) : new NeuralNetwork(24, 18, 4, 2);
+		brain = isCostum ? new NeuralNetwork(9, 6, 4, 1) : new NeuralNetwork(24, 18, 4, 2);
 		gl.setSnake(this);
 	}
 
@@ -95,10 +93,10 @@ public class Snake implements Serializable {
 	}
 
 	public void eat() { // eat food
-		//		System.out.println("Eat "+lifeLeft);
+		// System.out.println("Eat "+lifeLeft);
 		lifetime++;
-		score ++;
-		lifeLeft = Math.min(lifeLeft+eatLife, maxLife);
+		score++;
+		lifeLeft = Math.min(lifeLeft + eatLife, maxLife);
 	}
 
 	public Snake clone() { // clone the snake
@@ -124,13 +122,13 @@ public class Snake implements Serializable {
 	}
 
 	public void look() { // look in all 8 directions and check for food, body and wall
-		//if(isCostum)
-		starInput();
-		//else
-		//	standartLook();
+		if (isCostum) {
+			senInput();
+		} else {
+			standartLook();
+			//starInput();
+		}
 	}
-
-
 
 	public void standartLook() {
 		vision = new float[24];
@@ -168,55 +166,49 @@ public class Snake implements Serializable {
 		vision[23] = temp[2];
 	}
 
+	public void starInput() {
+		vision = new float[24];
+		Point head = getHead();
 
+		int count = 0;
+		Moves[] moves = { Moves.UP, Moves.DOWN, Moves.LEFT, Moves.RIGHT };
+		for (int i = -1; i <= 1; i++) {
+			for (int j = -1; j <= 1; j++) {
+				Point point = new Point(head.x - i, head.y - j);
+				int valueAt = gl.getValueAt(point);
+				if (!getHead().equals(point)) {
+					vision[count * 2] = valueAt == 2 ? 1 : 0;
+					vision[count * 2 + 1] = valueAt == 1 ? 1 : 0;
+					count++;
+				}
+			}
+		}
+		for (int i = 0; i < moves.length; i++) {
+			Moves m = moves[i];
+			int valueAt = gl.getValueAt(new Point(head.x - m.getValue().x * 2, head.y - m.getValue().y * 2));
+			vision[count * 2] = valueAt == 2 ? 1 : 0;
+			vision[count * 2 + 1] = valueAt == 1 ? 1 : 0;
+			count++;
+		}
+	}
 
-	
-    public void starInput() {
-        vision = new float[24];
-        Point head = getHead();
+	public void senInput() {
+		vision = new float[9];
+		Point head = getHead();
+		Point food = gl.getFoodPos();
+		float co = head.y - food.y;
+		float ca = food.x - head.y;
+		float h = (float) Math.sqrt(Math.pow(co, 2) + Math.pow(ca, 2));
+		vision[8] = co / h;
 
-        int count = 0;
-        Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                Point point = new Point(head.x-i,head.y-j);
-                int valueAt =  gl.getValueAt(point);
-                if(!getHead().equals(point)) {
-                    vision[count*2] = valueAt == 2 ? 1 : 0;
-                    vision[count*2+1] = valueAt == 1 ? 1 : 0;
-                    count++;
-                }
-            }
-        }
-        for (int i = 0; i < moves.length; i++) {
-            Moves m = moves[i];
-            int valueAt = gl.getValueAt(new Point(head.x - m.getValue().x*2,head.y - m.getValue().y*2));
-            vision[count*2] = valueAt == 2 ? 1 : 0;
-            vision[count*2+1] = valueAt == 1 ? 1 : 0;
-            count++;
-        }
-    }
-	
-	
-    public void senInput() {
-        vision = new float[9];
-        Point head = getHead();
-        Point food = gl.getFoodPos();
-        float co = head.y - food.y;
-        float ca = food.x - head.y;
-        float h = (float) Math.sqrt(Math.pow(co, 2)+Math.pow(ca, 2));
-        vision[8] = co/h;
-
-        Moves[] moves = {Moves.UP,Moves.DOWN,Moves.LEFT,Moves.RIGHT};
-        for (int i = 0; i < moves.length; i++) {
-            Moves m = moves[i];
-            int valueAt = gl.getValueAt(new Point(head.x+ m.getValue().x,head.y + m.getValue().y));
-            vision[i*2] = valueAt == 2 ? 1 : 0;
-            vision[i*2+1] = valueAt == 1 ? 1 : 0;
-        }
-    }
-
-
+		Moves[] moves = { Moves.UP, Moves.DOWN, Moves.LEFT, Moves.RIGHT };
+		for (int i = 0; i < moves.length; i++) {
+			Moves m = moves[i];
+			int valueAt = gl.getValueAt(new Point(head.x + m.getValue().x, head.y + m.getValue().y));
+			vision[i * 2] = valueAt == 2 ? 1 : 0;
+			vision[i * 2 + 1] = valueAt == 1 ? 1 : 0;
+		}
+	}
 
 	public float[] lookInDirection(Point direction) { // look in a direction and check for food, body and wall
 		float look[] = new float[3];
@@ -241,10 +233,6 @@ public class Snake implements Serializable {
 		look[2] = 1 / distance;
 		return look;
 	}
-
-
-
-
 
 	public void thinkAndMove() { // think about what direction to move
 		decision = brain.output(vision);
@@ -274,8 +262,7 @@ public class Snake implements Serializable {
 		System.err.println("???????????????");
 	}
 
-
-	public Point getHead(){
+	public Point getHead() {
 		return body.getLast();
 	}
 
@@ -291,18 +278,18 @@ public class Snake implements Serializable {
 	public void save() {
 		File f = new File("NewBestSnake.snake");
 		f.delete();
-		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
 			out.writeObject(this);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static Snake load(String path) {
 		File f = new File(path);
-		try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(f))) {
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(f))) {
 			return (Snake) in.readObject();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

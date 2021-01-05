@@ -16,8 +16,8 @@ public class GeneticEngine {
 
 
 
-	public static final boolean isCostum = false;
-	public static final float motationRate = 0.001f;
+	public static final boolean isCostum = true;
+	public static final float motationRate = 0.005f;
 
 
 
@@ -66,7 +66,7 @@ public class GeneticEngine {
 
 
 	public static void train(String[] args) throws InterruptedException {
-		Population pop = new Population(100,isCostum);
+		Population pop = new Population(150,isCostum);
 
 		//pop.getSnakes()[0]= Snake.load("NewBestSnake.snake");
 		
@@ -110,8 +110,8 @@ public class GeneticEngine {
 			}
 		}
 		pop.getBestSnake().save();
-
-		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"Our24_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
+//
+//		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"8_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
 //
 //		for (int j = 0; j < 10; j++) {
 //			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
