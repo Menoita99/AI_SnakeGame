@@ -16,26 +16,27 @@ public class GeneticEngine {
 
 
 
-	public static final boolean isCostum = true;
+	public static final boolean isCostum = false;
 	public static final float motationRate = 0.005f;
 
 
 
 
 	public static void main(String[] args) throws InterruptedException {
-		train(args);
-		//load();
+		//train(args);
+		load();
 		//getBestSeed();
 	}
 
 
 
 	public static void load() throws InterruptedException {
-		Snake s = Snake.load("NewBestSnake.snake");
+		Snake s = Snake.load("Snakes//StarInput//Snake34Score.snake");
 		new Thread(() -> Launch.main(null)).start();
 		Thread.sleep(1000);
 		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain(),isCostum);
 	}
+	
 	
 	public static void getBestSeed() {
 		float maxScore = 0;
@@ -68,8 +69,9 @@ public class GeneticEngine {
 	public static void train(String[] args) throws InterruptedException {
 		Population pop = new Population(150,isCostum);
 
-		//pop.getSnakes()[0]= Snake.load("NewBestSnake.snake");
-		
+		for (int i = 0; i < 20; i++) {
+			pop.getSnakes()[i]= Snake.load("NewBestSnake.snake");
+		}
 		int gens = 1000;
 
 		ArrayList<String> genarations = new ArrayList<>();
@@ -110,22 +112,22 @@ public class GeneticEngine {
 			}
 		}
 		pop.getBestSnake().save();
-//
-//		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"8_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
-//
-//		for (int j = 0; j < 10; j++) {
-//			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
-//			Snake s = new Snake(brain);
-//			s.setCostum(isCostum);
-//			while(!s.isDead()) {
-//				s.look();
-//				s.thinkAndMove();
-//			}
-//			System.out.println("Test "+j+" score "+s.getScore()+" fitness "+s.calculateFitness());
-//		}
-//		new Thread(() -> Launch.main(args)).start();
-//		Thread.sleep(1000);
-//		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone(),isCostum);
+
+		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"8_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
+
+		for (int j = 0; j < 10; j++) {
+			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
+			Snake s = new Snake(brain);
+			s.setCostum(isCostum);
+			while(!s.isDead()) {
+				s.look();
+				s.thinkAndMove();
+			}
+			System.out.println("Test "+j+" score "+s.getScore()+" fitness "+s.calculateFitness());
+		}
+		new Thread(() -> Launch.main(args)).start();
+		Thread.sleep(1000);
+		Gui.getINSTANCE().playWithNeuralNetwork(pop.getBestSnake().getBrain().clone(),isCostum);
 	}
 
 }

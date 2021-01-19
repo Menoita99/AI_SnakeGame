@@ -48,7 +48,7 @@ public class Gui extends Application{
 
 		nnButton = new Button("Play with nn");
 		nnButton.setOnMouseClicked(event ->{
-			Snake s = Snake.load("Snakes/StarInput/Snake34Score.snake");
+			Snake s = Snake.load("NewBestSnake.snake");
 			sn.setBrain(s.getBrain());
 			if(loopStarted) {
 				loop.stop();

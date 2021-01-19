@@ -19,16 +19,16 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 75;// 75;
+	private static final int maxLife = 400;// 75;
 
-	public static final int FIELD = 6;
+	public static final int FIELD = 20;
 
-	private static final int eatLife = 50;// 50
+	private static final int eatLife = 100;// 50
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 25; // quantidade de movimentos at� morrer
+	private int lifeLeft = 150; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 
 	private float[] vision;
@@ -125,8 +125,8 @@ public class Snake implements Serializable {
 		if (isCostum) {
 			senInput();
 		} else {
-			standartLook();
-			//starInput();
+			//standartLook();
+			starInput();
 		}
 	}
 
