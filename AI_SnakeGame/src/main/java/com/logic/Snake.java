@@ -19,16 +19,16 @@ public class Snake implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int maxLife = 400;// 75;
+	private static final int maxLife = 300;// 75;
 
-	public static final int FIELD = 20;
+	public static final int FIELD = 10;
 
-	private static final int eatLife = 100;// 50
+	private static final int eatLife = 70;// 50
 
 	private GameLogic gl;
 
 	private int score = 1;
-	private int lifeLeft = 150; // quantidade de movimentos at� morrer
+	private int lifeLeft = 70; // quantidade de movimentos at� morrer
 	private int lifetime = 0; // quantidade de movimentos que fez antes de morrer
 
 	private float[] vision;
@@ -42,15 +42,15 @@ public class Snake implements Serializable {
 	private int height;
 	private LinkedList<Food> foodPos = new LinkedList<>();
 
-	private boolean isCostum;
+	private int costum;
 
-	public Snake(boolean isCostum) {
-		this.isCostum = isCostum;
+	public Snake(int isCostum) {
+		this.costum = isCostum;
 		gl = new GameLogic(FIELD, FIELD);
 		this.width = gl.getWidth();
 		this.height = gl.getHeight();
 		body.add(new Point(gl.getWidth() / 2, gl.getHeight() / 2));
-		brain = isCostum ? new NeuralNetwork(9, 6, 4, 1) : new NeuralNetwork(24, 18, 4, 2);
+		brain = isCostum <= 0 ? new NeuralNetwork(9, 6, 4, 1) : new NeuralNetwork(24, 18, 4, 2);
 		gl.setSnake(this);
 	}
 
@@ -102,14 +102,14 @@ public class Snake implements Serializable {
 	public Snake clone() { // clone the snake
 		Snake clone = new Snake();
 		clone.setBrain(brain);
-		clone.setCostum(this.isCostum);
+		clone.setCostum(this.costum);
 		return clone;
 	}
 
 	public Snake crossover(Snake parent) { // crossover the snake with another snake
 		Snake child = new Snake();
 		child.brain = brain.crossover(parent.brain);
-		child.setCostum(parent.isCostum);
+		child.setCostum(parent.costum);
 		return child;
 	}
 
@@ -122,10 +122,11 @@ public class Snake implements Serializable {
 	}
 
 	public void look() { // look in all 8 directions and check for food, body and wall
-		if (isCostum) {
+		if (costum == 0) {
 			senInput();
+		} else if(costum == 1){
+			standartLook();
 		} else {
-			//standartLook();
 			starInput();
 		}
 	}

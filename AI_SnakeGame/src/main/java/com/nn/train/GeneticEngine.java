@@ -1,8 +1,8 @@
 package com.nn.train;
 
-
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.gui.Gui;
 import com.gui.Launch;
@@ -11,50 +11,57 @@ import com.logic.Snake;
 import com.neural.NeuralNetwork;
 import com.utils.ExcelWritter;
 
-
 public class GeneticEngine {
 
-
-
-	public static final boolean isCostum = false;
-	public static final float motationRate = 0.005f;
-
-
-
+	public static final int isCostum = 2;
+	public static final float motationRate = 0.01f;
 
 	public static void main(String[] args) throws InterruptedException {
 		//train(args);
-		load();
-		//getBestSeed();
+		// load();
+		// getBestSeed();
+		loadSnakes();
 	}
 
-
-
-	public static void load() throws InterruptedException {
-		Snake s = Snake.load("Snakes//StarInput//Snake34Score.snake");
+	public static void loadSnakes() throws InterruptedException {
+//		Snake s = Snake.load("Snakes//SenInput//NewBestSnake3.snake");
+//		new Thread(() -> Launch.main(null)).start();
+//		Thread.sleep(1000);
+//		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain(), 0); // Sen input
+//		Snake s1 = Snake.load("standardInput.snake");
+//		new Thread(() -> Launch.main(null)).start();
+//		Thread.sleep(1000);
+//		Gui.getINSTANCE().playWithNeuralNetwork(s1.getBrain(), 1);// Standard input
+		Snake s2 = Snake.load("Snakes//StarInput//Snake34Score.snake");
 		new Thread(() -> Launch.main(null)).start();
 		Thread.sleep(1000);
-		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain(),isCostum);
+		Gui.getINSTANCE().playWithNeuralNetwork(s2.getBrain(), 2); //Buble - Star input
+
 	}
-	
-	
+
+	public static void load() throws InterruptedException {
+		Snake s = Snake.load("bubleInput.snake");
+		new Thread(() -> Launch.main(null)).start();
+		Thread.sleep(1000);
+		Gui.getINSTANCE().playWithNeuralNetwork(s.getBrain(), isCostum);
+	}
 	public static void getBestSeed() {
 		float maxScore = 0;
 		long seed = 0;
 		long currentTimeMillis = System.currentTimeMillis();
-		for (long i = currentTimeMillis - 50000; i < currentTimeMillis ; i++) {
+		for (long i = currentTimeMillis - 50000; i < currentTimeMillis; i++) {
 			System.out.println(i);
 			GameLogic gl = new GameLogic(Snake.FIELD, Snake.FIELD, i);
-			Snake s = Snake.load("NewBestSnake.snake");
+			Snake s = Snake.load("Snake2.snake");
 			s.getBody().clear();
-			s.getBody().add(new Point(Snake.FIELD/2,Snake.FIELD/2));
+			s.getBody().add(new Point(Snake.FIELD / 2, Snake.FIELD / 2));
 			gl.setSnake(s);
 			s.setGl(gl);
-			while(!s.isDead()) {
+			while (!s.isDead()) {
 				s.look();
 				s.thinkAndMove();
 			}
-			if(maxScore < gl.getScore()) {
+			if (maxScore < gl.getScore()) {
 				maxScore = gl.getScore();
 				seed = i;
 				System.err.println(gl.getScore());
@@ -63,11 +70,8 @@ public class GeneticEngine {
 		System.out.println(seed + "|||" + maxScore);
 	}
 
-
-
-
 	public static void train(String[] args) throws InterruptedException {
-		Population pop = new Population(150,isCostum);
+		Population pop = new Population(150, isCostum);
 
 		for (int i = 0; i < 20; i++) {
 			pop.getSnakes()[i]= Snake.load("NewBestSnake.snake");
@@ -84,7 +88,7 @@ public class GeneticEngine {
 		long start = System.currentTimeMillis();
 
 		while (i < gens) {
-			if(pop.done()) {
+			if (pop.done()) {
 				pop.calculateFitness();
 				pop.naturalSelection();
 
@@ -95,14 +99,17 @@ public class GeneticEngine {
 				bestFitnessPerGen.add(Float.toString(pop.getGenBestSnake().calculateFitness()));
 
 				System.out.println("----------------------------");
-				System.out.println("Gen : "+i+" Score: "+pop.getGenBestSnake().getScore()+" fitness "+pop.getGenBestSnake().calculateFitness());
-				System.out.println("Gen: " + i + "|Average Score: " + pop.calculateAverageScore() +"|Average fitness:" + pop.calculateAverageFitness());
-				System.out.println("best of best Score: "+pop.getBestSnake().getScore()+" fitness "+pop.getBestSnake().calculateFitness());
-				System.out.println("Time "+(System.currentTimeMillis()-start));
+				System.out.println("Gen : " + i + " Score: " + pop.getGenBestSnake().getScore() + " fitness "
+						+ pop.getGenBestSnake().calculateFitness());
+				System.out.println("Gen: " + i + "|Average Score: " + pop.calculateAverageScore() + "|Average fitness:"
+						+ pop.calculateAverageFitness());
+				System.out.println("best of best Score: " + pop.getBestSnake().getScore() + " fitness "
+						+ pop.getBestSnake().calculateFitness());
+				System.out.println("Time " + (System.currentTimeMillis() - start));
 
 				start = System.currentTimeMillis();
 				i++;
-				if(i!= 0 && i%500 == 0) {
+				if (i != 0 && i % 500 == 0) {
 					pop.getBestSnake().save();
 					pop.getGenBestSnake().save();
 					System.out.println("Checkpoint");
@@ -112,9 +119,9 @@ public class GeneticEngine {
 			}
 		}
 		pop.getBestSnake().save();
-
-		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"8_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
-
+//
+//		ExcelWritter.write(genarations, scores, fitnesses,bestscorePerGen, bestFitnessPerGen ,"8_Neurons_"+ motationRate + "MutationRate_" +gens+"Gens_"+pop.getSnakes().length+"Pop_"+Snake.FIELD+"Field");
+//
 		for (int j = 0; j < 10; j++) {
 			NeuralNetwork brain = pop.getBestSnake().getBrain().clone();
 			Snake s = new Snake(brain);
