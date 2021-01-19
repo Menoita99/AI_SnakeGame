@@ -145,7 +145,7 @@ public class Gui extends Application{
 	}
 
 
-	public void playWithNeuralNetwork(NeuralNetwork n,boolean isCostum) {
+	public void playWithNeuralNetwork(NeuralNetwork n,int isCostum) {
 		sn = new Snake(isCostum);
 		System.out.println(n.getINodes());
 		sn.setBrain(n);

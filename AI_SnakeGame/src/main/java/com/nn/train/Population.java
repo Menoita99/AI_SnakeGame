@@ -24,8 +24,6 @@ public class Population implements Serializable{
 	private float fitnessSum = 0;
 	private int scoreSum = 0;
 
-	private boolean useCostumInput;
-
 	public Population(int size) {
 		populationSize = size;
 		snakes = new Snake[size];
@@ -40,9 +38,8 @@ public class Population implements Serializable{
 		bestSnake = new Snake(snakes[0].getBrain());
 	}
 
-	public Population(int size, boolean useCostumInput) {
+	public Population(int size, int useCostumInput) {
 		populationSize = size;
-		this.useCostumInput = useCostumInput;
 		snakes = new Snake[size];
 		for (int i = 0; i < snakes.length; i++)
 			snakes[i] = new Snake(useCostumInput);
